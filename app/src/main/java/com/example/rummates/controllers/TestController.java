@@ -36,7 +36,7 @@ public class TestController {
         Post Post = null;
 
         try{
-            Post = PostSerializer.testEntityDeserializer(herokuEndpoint.getAllPosts());
+            Post = PostSerializer.allPostsDeserializer(herokuEndpoint.getAllPosts());
             Log.d("Info", "Loading data from rumies.herokuapp.com/posts.");
             return Post;
         }catch(Exception e){
@@ -52,7 +52,7 @@ public class TestController {
         PostEntity postEntity = null;
 
         try{
-            postEntity = PostSerializer.postsListDrializer(herokuEndpoint.getFirstPost());
+            postEntity = PostSerializer.singlePostDeserializer(herokuEndpoint.getFirstPost());
             Log.d("Info", "Loading data from rumies.herokuapp.com/posts/5da8e600b5d6e426d4d6ef0b.");
             return postEntity;
         }catch(Exception e){

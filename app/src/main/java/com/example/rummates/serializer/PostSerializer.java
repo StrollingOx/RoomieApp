@@ -6,12 +6,12 @@ import com.google.gson.Gson;
 
 public class PostSerializer {
 
-    public static Post testEntityDeserializer(String json){
+    public static Post allPostsDeserializer(String json){
         Gson gson = new Gson();
         return gson.fromJson(json, Post.class);
     }
 
-    public static PostEntity postsListDrializer(String json){
+    public static PostEntity singlePostDeserializer(String json){
         Gson gson = new Gson();
         return gson.fromJson(json, PostEntity.class);
     }
