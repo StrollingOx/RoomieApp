@@ -10,10 +10,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.concurrent.ExecutionException;
 
-public class HerokuEndpoint {
+public class PostsEndpoint {
     private static final String USER_AGENT = "Mozilla/5.0";
     private static final String SERVER_URL = "https://rumies.herokuapp.com";
-    private static final String SERVER_POSTS = "https://rumies.herokuapp.com/posts";
+    private static final String SERVER_POSTS = "https://rumies.herokuapp.com/notes";
 
     public String getAllPosts(){
         NetworkConnector networkConnector = new NetworkConnector();
@@ -40,7 +40,6 @@ public class HerokuEndpoint {
         }
         return response;
     }
-
 
 
     @SuppressLint("StaticFieldLeak")

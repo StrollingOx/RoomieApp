@@ -34,10 +34,6 @@ public class PostEntity {
         return _id;
     }
 
-    public void set_id(String _id) {
-        this._id = _id;
-    }
-
     public String getTitle() {
         return title;
     }
@@ -58,15 +54,7 @@ public class PostEntity {
         return date;
     }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
-
     public String get__v() {
         return __v;
-    }
-
-    public void set__v(String __v) {
-        this.__v = __v;
     }
 }

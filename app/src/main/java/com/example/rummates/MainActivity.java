@@ -33,7 +33,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MainActivity extends AppCompatActivity {
 
     private LoginButton loginButton;
-    private Button magicButton;
+    private Button magicButton, registerButton;
     private CircleImageView circleImageView;
     private TextView textName, textEmail;
 
@@ -46,12 +46,10 @@ public class MainActivity extends AppCompatActivity {
 
         loginButton = findViewById(R.id.login_button);
         magicButton = findViewById(R.id.magic_button);
+        registerButton = findViewById(R.id.register_button);
         textEmail = findViewById(R.id.profile_email);
         textName = findViewById(R.id.profile_name);
         circleImageView = findViewById(R.id.profile_pic);
-
-        magicButton.setEnabled(false);
-
 
         callbackManager = CallbackManager.Factory.create();
         loginButton.setPermissions(Arrays.asList("email","public_profile"));
@@ -77,6 +75,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, PostsActivity.class));
+            }
+        });
+
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
             }
         });
     }
