@@ -1,11 +1,8 @@
 package com.example.rummates;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,24 +13,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONObject;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.regex.Pattern;
-
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -45,6 +28,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private final int MIN_PASSWORD = 8;
     private final int MIN_NICK = 6;
+    private final int WAIT_TIME = 6;
 
     boolean valid;
 
@@ -62,6 +46,7 @@ public class RegisterActivity extends AppCompatActivity {
         mButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
+                Toast.makeText(getBaseContext(), "WAIT", Toast.LENGTH_LONG).show();
 
                 EditText firstNameField = (EditText) findViewById(R.id.fName);
                 EditText lastNameField = (EditText) findViewById(R.id.lastName);
@@ -78,11 +63,23 @@ public class RegisterActivity extends AppCompatActivity {
                 password2 = password2Field.getText().toString();
 
                 sendPost(firstName, lastName, nick, email, password, password2,getBaseContext());
-                if(valid){
-                    Toast.makeText(getBaseContext(), "Wszystko walidne", Toast.LENGTH_LONG).show();
-                    //TODO redirect to Michal's user page
-                    //startActivity(new Intent(getApplicationContext(), <MICHAL'S PAGE>));
+
+                Thread t = new Thread();
+                try {
+                    t.sleep(WAIT_TIME*1000);
+                    if(valid){
+                        Toast.makeText(getBaseContext(), "Wszystko walidne", Toast.LENGTH_LONG).show();
+                        //TODO redirect to Michal's user page
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    }
+                    else
+                    {
+                        Toast.makeText(getBaseContext(), "Wszystko CHUJOWE", Toast.LENGTH_LONG).show();
+                    }
+                    t.interrupt();
+                } catch (InterruptedException e) {
                 }
+
             }
         });
 
@@ -175,6 +172,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         thread.start();
+
     }
 
 //
