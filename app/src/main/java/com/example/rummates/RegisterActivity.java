@@ -26,12 +26,11 @@ public class RegisterActivity extends AppCompatActivity {
     private static final String BASE_URL = "https://rumies.herokuapp.com";
     private static final String REGISTER = "/users/register";
 
-    private final int MIN_PASSWORD = 8;
-    private final int MIN_NICK = 6;
+    private final int MIN_PASSWORD = 3;     //SHOULD BE 8
+    private final int MIN_NICK = 3;         // SHOULD BE 6
     private final int WAIT_TIME = 6;
 
     boolean valid;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +44,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         mButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
-                Toast.makeText(getBaseContext(), "WAIT", Toast.LENGTH_LONG).show();
 
                 EditText firstNameField = (EditText) findViewById(R.id.fName);
                 EditText lastNameField = (EditText) findViewById(R.id.lastName);
@@ -62,24 +59,24 @@ public class RegisterActivity extends AppCompatActivity {
                 password = passwordField.getText().toString();
                 password2 = password2Field.getText().toString();
 
-                sendPost(firstName, lastName, nick, email, password, password2,getBaseContext());
+                if (validUserInput(firstName, lastName, nick, email, password, password2, getBaseContext())) {
 
-                Thread t = new Thread();
-                try {
-                    t.sleep(WAIT_TIME*1000);
-                    if(valid){
-                        Toast.makeText(getBaseContext(), "Wszystko walidne", Toast.LENGTH_LONG).show();
-                        //TODO redirect to Michal's user page
-                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    sendPost(firstName, lastName, nick, email, password, password2, getBaseContext());
+
+                    Thread t = new Thread();
+                    try {
+                        t.sleep(WAIT_TIME * 1000);
+                        if (valid) {
+                            Toast.makeText(getBaseContext(), "EVERYTHING VALID", Toast.LENGTH_LONG).show();
+                            //TODO redirect to Michal's user page
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        } else {
+                            Toast.makeText(getBaseContext(), "SOMETHING WENT WRONG", Toast.LENGTH_LONG).show();
+                        }
+                        t.interrupt();
+                    } catch (InterruptedException e) {
                     }
-                    else
-                    {
-                        Toast.makeText(getBaseContext(), "Wszystko CHUJOWE", Toast.LENGTH_LONG).show();
-                    }
-                    t.interrupt();
-                } catch (InterruptedException e) {
                 }
-
             }
         });
 
@@ -99,32 +96,34 @@ public class RegisterActivity extends AppCompatActivity {
         boolean valid = true;
         if (!password2.equals(password)) {
             Log.d("PASSWORD_ERROR", "NIE TAKIE SAME HASLO");
-            Toast.makeText(ctx, "NIE TAKIE SAME HASLO", Toast.LENGTH_LONG).show();
+            Toast.makeText(ctx, "PASSWORDS ARE NOT EQUAL", Toast.LENGTH_SHORT).show();
             valid = false;
         }
         if (password.length() < MIN_PASSWORD) {
             Log.d("PASSWORD_ERROR", "password too short");
-            Toast.makeText(ctx, "password too short", Toast.LENGTH_LONG).show();
+            Toast.makeText(ctx, "PASDSWORD IS TOO SHORT", Toast.LENGTH_SHORT).show();
             valid = false;
         }
-        if ( nick.length() < MIN_NICK ) {
+        if (nick.length() < MIN_NICK) {
             Log.d("PASSWORD_ERROR", "nick too short");
-            Toast.makeText(ctx, "nick too short", Toast.LENGTH_LONG).show();
+            Toast.makeText(ctx, "NICK IS TOO SHORT", Toast.LENGTH_SHORT).show();
             valid = false;
         }
-        if(stringContainsNumber(firstName) || stringContainsNumber(lastName)){
+        if (stringContainsNumber(firstName) || stringContainsNumber(lastName)) {
             Log.d("PASSWORD_ERROR", "NAME CAN NOT CONTAIN NUMBERS");
-            Toast.makeText(ctx, "NAME CAN NOT CONTAIN NUMBERS", Toast.LENGTH_LONG).show();
+            Toast.makeText(ctx, "NAMES CAN NOT CONTAIN NUMBERS", Toast.LENGTH_SHORT).show();
             valid = false;
         }
-        if(!email.contains("@")){
+        if (!email.contains("@")) {
             Log.d("PASSWORD_ERROR", "email has to have @ sign");
-            Toast.makeText(ctx, "email has to have @ sign", Toast.LENGTH_LONG).show();
+            Toast.makeText(ctx, "EMAIL NOT VALID", Toast.LENGTH_SHORT).show();
             valid = false;
+        }
+        else{
+            Toast.makeText(getBaseContext(), "PLEASE WAIT", Toast.LENGTH_LONG).show();
         }
         return valid;
-
-}
+    }
 
     //Maybe it should be Async
     public void sendPost(final String firstName, final String lastName, final String nick, final String email, final String password, final String password2, final Context ctx) {
@@ -140,28 +139,27 @@ public class RegisterActivity extends AppCompatActivity {
                     conn.setDoOutput(true);
                     conn.setDoInput(true);
 
-                    if (validUserInput(firstName, lastName, nick, email, password, password2,ctx)) {
-                        JSONObject jsonParam = new JSONObject();
-                        jsonParam.put("first_name", firstName);
-                        jsonParam.put("last_name", lastName);
-                        jsonParam.put("nick", nick);
-                        jsonParam.put("email", email);
-                        jsonParam.put("password", password);
-                        jsonParam.put("phone_number", "90011");
+                    JSONObject jsonParam = new JSONObject();
+                    jsonParam.put("first_name", firstName);
+                    jsonParam.put("last_name", lastName);
+                    jsonParam.put("nick", nick);
+                    jsonParam.put("email", email);
+                    jsonParam.put("password", password);
+                    jsonParam.put("phone_number", "90011");
 
-                        Log.i("JSON", jsonParam.toString());
-                        DataOutputStream os = new DataOutputStream(conn.getOutputStream());
-                        //os.writeBytes(URLEncoder.encode(jsonParam.toString(), "UTF-8"));
-                        os.writeBytes(jsonParam.toString());
+                    Log.i("JSON", jsonParam.toString());
+                    DataOutputStream os = new DataOutputStream(conn.getOutputStream());
+                    //os.writeBytes(URLEncoder.encode(jsonParam.toString(), "UTF-8"));
+                    os.writeBytes(jsonParam.toString());
 
-                        os.flush();
-                        os.close();
+                    os.flush();
+                    os.close();
 
-                        Log.i("ENDPOINT", BASE_URL + REGISTER);
-                        Log.i("STATUS", String.valueOf(conn.getResponseCode()));
-                        Log.i("MSG", conn.getResponseMessage());
-                        valid = true;
-                    }
+                    Log.i("ENDPOINT", BASE_URL + REGISTER);
+                    Log.i("STATUS", String.valueOf(conn.getResponseCode()));
+                    Log.i("MSG", conn.getResponseMessage());
+                    valid = true;
+
 
                     conn.disconnect();
                 } catch (Exception e) {
