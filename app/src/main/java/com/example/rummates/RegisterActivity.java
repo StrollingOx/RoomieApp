@@ -1,11 +1,8 @@
 package com.example.rummates;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,32 +13,24 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONObject;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.Charset;
-
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
 
     Button mButton, cancelButton;
     Context context;
-    static String email, password, nick, firstName, lastName, password2;
+    public static String email, password, nick, firstName, lastName, password2;
     private static final String BASE_URL = "https://rumies.herokuapp.com";
     private static final String REGISTER = "/users/register";
 
+    private final int MIN_PASSWORD = 3;     //SHOULD BE 8
+    private final int MIN_NICK = 3;         // SHOULD BE 6
+    private final int WAIT_TIME = 6;
+
+    boolean valid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +40,10 @@ public class RegisterActivity extends AppCompatActivity {
         context = getApplicationContext();
         mButton = findViewById(R.id.confirmButton);
         cancelButton = findViewById(R.id.cancelButton);
-
+        valid = false;
 
         mButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
 
                 EditText firstNameField = (EditText) findViewById(R.id.fName);
                 EditText lastNameField = (EditText) findViewById(R.id.lastName);
@@ -71,17 +59,24 @@ public class RegisterActivity extends AppCompatActivity {
                 password = passwordField.getText().toString();
                 password2 = password2Field.getText().toString();
 
-                sendPost();
-               // postNewUser(BASE_URL + REGISTER);
-//                try {
-//                    postNewUser(BASE_URL+REGISTER);
-//                    Toast.makeText(getBaseContext(), "nooo jest git ", Toast.LENGTH_LONG).show();
-//                }
-//                catch (Exception e){
-//                    Toast.makeText(getBaseContext(), "chuj i pizda "+e, Toast.LENGTH_LONG).show();
-//                }
+                if (validUserInput(firstName, lastName, nick, email, password, password2, getBaseContext())) {
 
-                //TODO add logic here, to execute post method with parameters above
+                    sendPost(firstName, lastName, nick, email, password, password2, getBaseContext());
+
+                    Thread t = new Thread();
+                    try {
+                        t.sleep(WAIT_TIME * 1000);
+                        if (valid) {
+                            Toast.makeText(getBaseContext(), "EVERYTHING VALID", Toast.LENGTH_LONG).show();
+                            //TODO redirect to Michal's user page
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        } else {
+                            Toast.makeText(getBaseContext(), "SOMETHING WENT WRONG", Toast.LENGTH_LONG).show();
+                        }
+                        t.interrupt();
+                    } catch (InterruptedException e) {
+                    }
+                }
             }
         });
 
@@ -93,7 +88,45 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-    public void sendPost() {
+    public boolean stringContainsNumber(String s) {
+        return Pattern.compile("[0-9]").matcher(s).find();
+    }
+
+    public boolean validUserInput(final String firstName, final String lastName, final String nick, final String email, final String password, final String password2, final Context ctx) {
+        boolean valid = true;
+        if (!password2.equals(password)) {
+            Log.d("PASSWORD_ERROR", "NIE TAKIE SAME HASLO");
+            Toast.makeText(ctx, "PASSWORDS ARE NOT EQUAL", Toast.LENGTH_SHORT).show();
+            valid = false;
+        }
+        if (password.length() < MIN_PASSWORD) {
+            Log.d("PASSWORD_ERROR", "password too short");
+            Toast.makeText(ctx, "PASDSWORD IS TOO SHORT", Toast.LENGTH_SHORT).show();
+            valid = false;
+        }
+        if (nick.length() < MIN_NICK) {
+            Log.d("PASSWORD_ERROR", "nick too short");
+            Toast.makeText(ctx, "NICK IS TOO SHORT", Toast.LENGTH_SHORT).show();
+            valid = false;
+        }
+        if (stringContainsNumber(firstName) || stringContainsNumber(lastName)) {
+            Log.d("PASSWORD_ERROR", "NAME CAN NOT CONTAIN NUMBERS");
+            Toast.makeText(ctx, "NAMES CAN NOT CONTAIN NUMBERS", Toast.LENGTH_SHORT).show();
+            valid = false;
+        }
+        if (!email.contains("@")) {
+            Log.d("PASSWORD_ERROR", "email has to have @ sign");
+            Toast.makeText(ctx, "EMAIL NOT VALID", Toast.LENGTH_SHORT).show();
+            valid = false;
+        }
+        else{
+            Toast.makeText(getBaseContext(), "PLEASE WAIT", Toast.LENGTH_LONG).show();
+        }
+        return valid;
+    }
+
+    //Maybe it should be Async
+    public void sendPost(final String firstName, final String lastName, final String nick, final String email, final String password, final String password2, final Context ctx) {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -107,12 +140,12 @@ public class RegisterActivity extends AppCompatActivity {
                     conn.setDoInput(true);
 
                     JSONObject jsonParam = new JSONObject();
-                    jsonParam.put("first_name", "android");
-                    jsonParam.put("last_name", "test");
-                    jsonParam.put("nick", "androidtest");
-                    jsonParam.put("email", "test@test.pl");
-                    jsonParam.put("password", "test");
-                    jsonParam.put("phone_number", "112233");
+                    jsonParam.put("first_name", firstName);
+                    jsonParam.put("last_name", lastName);
+                    jsonParam.put("nick", nick);
+                    jsonParam.put("email", email);
+                    jsonParam.put("password", password);
+                    jsonParam.put("phone_number", "90011");
 
                     Log.i("JSON", jsonParam.toString());
                     DataOutputStream os = new DataOutputStream(conn.getOutputStream());
@@ -125,6 +158,8 @@ public class RegisterActivity extends AppCompatActivity {
                     Log.i("ENDPOINT", BASE_URL + REGISTER);
                     Log.i("STATUS", String.valueOf(conn.getResponseCode()));
                     Log.i("MSG", conn.getResponseMessage());
+                    valid = true;
+
 
                     conn.disconnect();
                 } catch (Exception e) {
@@ -135,119 +170,47 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         thread.start();
+
     }
 
-
-//    protected String postData(String url) {
-//        StringBuilder response = new StringBuilder();
-//        HttpURLConnection con = null;
-//        int responseCode = 0;
-//        try {
-//            URL obj = new URL(url);
-//            con = (HttpURLConnection) obj.openConnection();
-//            con.setRequestMethod("POST");
-//            con.setRequestProperty("first_name", "android");
-//            con.setRequestProperty("last_name", "test");
-//            con.setRequestProperty("nick", "androidtest");
-//            con.setRequestProperty("email", "test@test.pl");
-//            con.setRequestProperty("password", "test");
-//            con.setRequestProperty("phone_number", "112233");
-//            con.setDoOutput(true);
 //
-//            OutputStream outputPost = new BufferedOutputStream(con.getOutputStream());
+//    private class NetworkConnector extends AsyncTask<Object, Void, String> {
 //
-//            try (Writer w = new OutputStreamWriter(outputPost, "UTF-8")) {
-//                w.write("Hello, World!");
+//        @Override
+//        protected String doInBackground(Object... objects) {
+//            StringBuilder response = new StringBuilder();
+//            HttpURLConnection con = null;
+//            int responseCode = 0;
+//            try {
+//                URL obj = new URL(selector((Integer)objects[0]));
+//                con = (HttpURLConnection) obj.openConnection();
+//                con.setRequestMethod("GET");
+//                con.setRequestProperty("User-Agent", USER_AGENT);
+//                responseCode = con.getResponseCode();
+//            } catch (Exception e) {
+//                return "connection-exception";
 //            }
-//            outputPost.flush();
-//            outputPost.close();
 //
-//            con.setChunkedStreamingMode(0);
-//        } catch (Exception e) {
-//            Log.d("ERRORRR", "exception wyjebalo" + e);
-//            return "connection-exception" + e;
-//        } finally {
-//            if (con != null) // Make sure the connection is not null.
-//                con.disconnect();
-//        }
-//
-//        if (responseCode == 404) {
-//            Log.d("ERRORRR", "ERROOOR 404");
-//            return "not-found-exception";
-//        }
-//
-//        Log.d("Internet", "Sending request to URL : " + con.getURL().toString());
-//        Log.d("Internet", "Response Code: " + responseCode);
-//
-//        return response.toString();
-//    }
-
-
-//    public class CallAPI extends AsyncTask<String, String, String> {
-//
-//        String emailString;
-//        String commentString;
-//
-//
-//
-//        @Override
-//        protected void onPreExecute() {
-//            super.onPreExecute();
-//        }
-//
-//        @Override
-//        protected String doInBackground(String... params) {
-//            OkHttpClient client = new OkHttpClient();
-//            RequestBody formBody = new FormBody.Builder()
-//                    .add("first_name", "android")
-//                    .add("last_name", "test")
-//                    .add("nick", "androidtest")
-//                    .add("email", "test@test.pl")
-//                    .add("password", "test")
-//                    .add("phone_number", "112233")
-//                    .build();
-//            Request request = new Request.Builder()
-//                    .url(BASE_URL+REGISTER) // The URL to send the data to
-//                    .post(formBody)
-//                    .build();
-//
-//            try (Response response = client.newCall(request).execute()) {
-//                if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-//
-//                System.out.println(response.body().toString());
+//            if (responseCode == 404) {
+//                return "not-found-exception";
 //            }
-//        }
 //
-//        @Override
-//        protected void onPostExecute(String s) {
-//            super.onPostExecute(s);
+//            Log.d("Internet", "Sending request to URL : " + con.getURL().toString());
+//            Log.d("Internet", "Response Code: " + responseCode);
+//            BufferedReader in = null;
+//            try {
+//                in = new BufferedReader(
+//                        new InputStreamReader(con.getInputStream()));
+//                String inputLine;
+//                while ((inputLine = in.readLine()) != null) {
+//                    response.append(inputLine);
+//                }
+//                in.close();
+//            } catch (Exception e) {
+//                return "memory-exception";
+//            }
+//            return response.toString();
 //        }
 //    }
-
-    private final OkHttpClient client = new OkHttpClient();
-
-    public void postNewUser(String url) throws Exception {
-        RequestBody formBody = new FormBody.Builder()
-                .add("first_name", "android")
-                .add("last_name", "test2")
-                .add("nick", "android")
-                .add("email", "test2@test2.pl")
-                .add("password", "test2")
-                .add("phone_number", "1122332")
-                .build();
-        Request request = new Request.Builder()
-                .url(url)
-                .post(formBody)
-                .build();
-
-        try (Response response = client.newCall(request).execute()) {
-            if (!response.isSuccessful()) {
-                Log.d("PIZDAAAAAAAA", "CHUJ JEBLO COS " + response);
-                throw new IOException("Unexpected code " + response);
-            }
-
-            System.out.println(response.body().string());
-        }
-    }
 
 }
