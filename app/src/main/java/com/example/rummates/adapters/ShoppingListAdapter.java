@@ -1,9 +1,13 @@
 package com.example.rummates.adapters;
 
+import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -34,13 +38,14 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView sliName;
+        TextView sliName, sliMenu;
         CheckBox sliCheckBox;
 
         public ViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
             sliName = itemView.findViewById(R.id.sli_name);
             sliCheckBox = itemView.findViewById(R.id.sli_checkbox);
+            sliMenu  = itemView.findViewById(R.id.sli_menu);
 
             itemView.setOnClickListener(new View.OnClickListener()
             {
@@ -79,8 +84,36 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
 
         holder.sliName.setText(currentItem.getItemName());
         holder.sliCheckBox.setChecked(currentItem.isChecked());
-
+        holder.sliMenu.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                PopupMenu popup = new PopupMenu(v.getContext(), v); //??
+                popup.inflate(R.menu.layout_shoppinglist_item_menu);
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.slim_add_comment:
+                                //handle menu1 click
+                                return true;
+                            case R.id.slim_delete:
+                                //handle menu2 click
+                                return true;
+                            case R.id.slim_create_notification:
+                                //handle menu3 click
+                                return true;
+                            case R.id.slim_details:
+                                //handle menu4 click
+                                return true;
+                            default:
+                                return false;
+                    }
+                }}); popup.show();
+            }
+        });
     }
+
+
 
     @Override
     public int getItemCount() {
