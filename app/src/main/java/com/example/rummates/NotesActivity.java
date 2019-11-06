@@ -9,7 +9,7 @@ import com.example.rummates.controllers.TestController;
 import com.example.rummates.entities.testEntity.PostEntity;
 import com.example.rummates.entities.testEntity.Post;
 
-public class PostsActivity extends AppCompatActivity {
+public class NotesActivity extends AppCompatActivity {
 
     private TextView id, title, desc, date, __v;
     private Post Post;
