@@ -69,7 +69,7 @@ public class RegisterActivity extends AppCompatActivity {
                         if (valid) {
                             Toast.makeText(getBaseContext(), "EVERYTHING VALID", Toast.LENGTH_LONG).show();
                             //TODO redirect to Michal's user page
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                         } else {
                             Toast.makeText(getBaseContext(), "SOMETHING WENT WRONG", Toast.LENGTH_LONG).show();
                         }
@@ -82,7 +82,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
             }
         });
 
