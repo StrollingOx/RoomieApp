@@ -80,14 +80,20 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position){ //final int position{
-        Item currentItem = arrayItems.get(position);
+        final Item currentItem = arrayItems.get(position);
 
         holder.sliName.setText(currentItem.getItemName());
         holder.sliCheckBox.setChecked(currentItem.isChecked());
+        holder.sliCheckBox.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                currentItem.toggle();
+            }
+        });
         holder.sliMenu.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                PopupMenu popup = new PopupMenu(v.getContext(), v); //??
+                PopupMenu popup = new PopupMenu(v.getContext(), v); //hmmmmmmmmmmm
                 popup.inflate(R.menu.layout_shoppinglist_item_menu);
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
@@ -97,7 +103,8 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
                                 //handle menu1 click
                                 return true;
                             case R.id.slim_delete:
-                                //handle menu2 click
+                                arrayItems.remove(position);
+                                notifyItemRemoved(position);
                                 return true;
                             case R.id.slim_create_notification:
                                 //handle menu3 click
