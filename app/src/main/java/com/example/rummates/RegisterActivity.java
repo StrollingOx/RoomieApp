@@ -173,44 +173,4 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-//
-//    private class NetworkConnector extends AsyncTask<Object, Void, String> {
-//
-//        @Override
-//        protected String doInBackground(Object... objects) {
-//            StringBuilder response = new StringBuilder();
-//            HttpURLConnection con = null;
-//            int responseCode = 0;
-//            try {
-//                URL obj = new URL(selector((Integer)objects[0]));
-//                con = (HttpURLConnection) obj.openConnection();
-//                con.setRequestMethod("GET");
-//                con.setRequestProperty("User-Agent", USER_AGENT);
-//                responseCode = con.getResponseCode();
-//            } catch (Exception e) {
-//                return "connection-exception";
-//            }
-//
-//            if (responseCode == 404) {
-//                return "not-found-exception";
-//            }
-//
-//            Log.d("Internet", "Sending request to URL : " + con.getURL().toString());
-//            Log.d("Internet", "Response Code: " + responseCode);
-//            BufferedReader in = null;
-//            try {
-//                in = new BufferedReader(
-//                        new InputStreamReader(con.getInputStream()));
-//                String inputLine;
-//                while ((inputLine = in.readLine()) != null) {
-//                    response.append(inputLine);
-//                }
-//                in.close();
-//            } catch (Exception e) {
-//                return "memory-exception";
-//            }
-//            return response.toString();
-//        }
-//    }
-
 }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.rummates.signIn.SignIn;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
@@ -30,12 +32,13 @@ import java.util.Arrays;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+//TODO:Rename to 'LoginActivity'
+//TODO:Create TabLayoutActivtiy(Which will be our new main activity after logging in)
 public class MainActivity extends AppCompatActivity {
 
     private LoginButton loginButton;
-    private Button magicButton, registerButton;
-    private CircleImageView circleImageView;
-    private TextView textName, textEmail;
+    private Button magicButton, registerButton, signInButton;
+    String nick,password;
 
     private CallbackManager callbackManager;
 
@@ -46,10 +49,11 @@ public class MainActivity extends AppCompatActivity {
 
         loginButton = findViewById(R.id.login_button);
         magicButton = findViewById(R.id.magic_button);
+
         registerButton = findViewById(R.id.register_button);
-        textEmail = findViewById(R.id.profile_email);
-        textName = findViewById(R.id.profile_name);
-        circleImageView = findViewById(R.id.profile_pic);
+        signInButton = findViewById(R.id.sign_in_button);
+
+
 
         callbackManager = CallbackManager.Factory.create();
         loginButton.setPermissions(Arrays.asList("email","public_profile"));
@@ -83,6 +87,26 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
             }
         });
+
+        signInButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+
+                EditText nickField = (EditText) findViewById(R.id.sign_in_username);
+                EditText passwordField = (EditText) findViewById(R.id.sign_in_password);
+
+                nick = nickField.getText().toString();
+                password = passwordField.getText().toString();
+
+                SignIn signIn = new SignIn(nick, password);
+                String status = signIn.handleSignIn(nick,password);
+                Toast.makeText(getBaseContext(), status, Toast.LENGTH_LONG).show();
+                if(Integer.parseInt(status) == 201){
+                    startActivity(new Intent(MainActivity.this, TemporaryActivity.class));
+                    //TODO go to Michal's user page
+                }
+            }
+        });
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -94,16 +118,15 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken)
         {
-            if(currentAccessToken==null)
-            {
-                textName.setText("");
-                textEmail.setText("");
-                circleImageView.setImageDrawable(getResources().getDrawable(R.mipmap.ic_launcher));
-                magicButton.setEnabled(false);
+            if(currentAccessToken==null) {
+                //magicButton.setEnabled(false);
                 Toast.makeText(MainActivity.this,"User Logged out",Toast.LENGTH_LONG).show();
             }
-            else
+            else {
                 loadUserProfile(currentAccessToken);
+                startActivity(new Intent(MainActivity.this, TemporaryActivity.class));
+            }
+
         }
     };
 
@@ -120,19 +143,17 @@ public class MainActivity extends AppCompatActivity {
                     String id = object.getString("id");
                     String image_url = "https://graph.facebook.com/"+id+ "/picture?type=normal";
 
-                    textEmail.setText(email);
-                    textName.setText(first_name +" "+last_name);
                     RequestOptions requestOptions = new RequestOptions();
                     requestOptions.dontAnimate();
 
-                    Glide.with(MainActivity.this).load(image_url).into(circleImageView);
+                    //Glide.with(MainActivity.this).load(image_url).into(circleImageView);
 
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
+
         });
 
         Bundle parameters = new Bundle();

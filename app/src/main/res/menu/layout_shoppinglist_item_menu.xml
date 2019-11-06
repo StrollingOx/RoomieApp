@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- slim - shoppinglist item menu-->
+    <item android:id="@+id/slim_add_comment"
+        android:title="Add comment" />
+    <item android:id="@+id/slim_delete"
+        android:title="Delete" />
+    <item android:id="@+id/slim_create_notification"
+        android:title="Create notification" />
+    <item android:id="@+id/slim_details"
+        android:title="Details" />
+</menu>
