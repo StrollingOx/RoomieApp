@@ -7,9 +7,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.example.rummates.fragments.NotesFragment;
+import com.example.rummates.fragments.notes.NotesFragment;
 import com.example.rummates.fragments.ShoppingListFragment;
-import com.example.rummates.fragments.TempFragmentProfile;
+import com.example.rummates.fragments.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
 
                 case R.id.bottom_nav3:
-                    selectedFragment = new TempFragmentProfile();
+                    selectedFragment = new ProfileFragment();
                     break;
             }
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,selectedFragment).commit();

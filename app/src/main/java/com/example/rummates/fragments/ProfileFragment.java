@@ -17,7 +17,7 @@ import com.example.rummates.NotesActivity;
 import com.example.rummates.ProfileActivity;
 import com.example.rummates.R;
 
-public class TempFragmentProfile extends Fragment {
+public class ProfileFragment extends Fragment {
 
     Button leButton;
 

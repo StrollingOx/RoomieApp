@@ -1,4 +1,4 @@
-package com.example.rummates.fragments;
+package com.example.rummates.fragments.notes;
 
 import androidx.lifecycle.ViewModel;
 
