@@ -9,7 +9,7 @@ import com.example.rummates.controllers.TestController;
 import com.example.rummates.entities.testEntity.PostEntity;
 import com.example.rummates.entities.testEntity.Post;
 
-public class PostsActivity extends AppCompatActivity {
+public class NotesActivity extends AppCompatActivity {
 
     private TextView id, title, desc, date, __v;
     private Post Post;
@@ -18,7 +18,7 @@ public class PostsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.posts_layout);
+        setContentView(R.layout.layout_posts);
 
         id = findViewById(R.id.id_value);
         title = findViewById(R.id.title_value);

@@ -12,20 +12,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
-        <activity android:name=".MainActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <activity android:name=".RegisterActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".NotesActivity"></activity>
+        <activity android:name=".ProfileActivity"></activity>
+        <activity android:name=".MainActivity" android:label="Main"></activity>
+        <activity android:name=".LoginActivity" >
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".PostsActivity"
-            android:label="TEST">
-        </activity>
-        <activity
-            android:name=".TemporaryActivity"
-            android:label="TEMP">
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+    </activity><activity
+            android:name=".EditNoteActivity"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity android:name="com.facebook.FacebookActivity"
             android:configChanges=
@@ -41,7 +40,6 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".RegisterActivity" android:screenOrientation="portrait"/>
 
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>

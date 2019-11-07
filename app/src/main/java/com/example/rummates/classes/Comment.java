@@ -1,6 +1,9 @@
 package com.example.rummates.classes;
 
-public class Comment {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Comment implements Parcelable {
     private String username;
     private String description;
 
@@ -23,5 +26,16 @@ public class Comment {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(username);
+        dest.writeString(description);
     }
 }

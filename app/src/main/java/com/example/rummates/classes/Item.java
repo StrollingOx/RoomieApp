@@ -13,6 +13,11 @@ public class Item {
         this.isChecked = isChecked;
     }
 
+    public Item(String itemName, boolean isChecked, ArrayList<Comment> comments) {
+        this.itemName = itemName;
+        this.isChecked = isChecked;
+        this.comments = comments;
+    }
 
     public String getItemName() {
         return itemName;
@@ -41,4 +46,11 @@ public class Item {
         comments.remove(position);
     }
 
+    public ArrayList<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(ArrayList<Comment> comments) {
+        this.comments = comments;
+    }
 }
