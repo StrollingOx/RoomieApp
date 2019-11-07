@@ -1,7 +1,5 @@
 package com.example.rummates.adapters;
 
-import android.app.Activity;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,15 +9,15 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.rummates.R;
+import com.example.rummates.adapters.expandableadapter.CommentAdapter;
+import com.example.rummates.adapters.expandableadapter.CommentGroupModel;
 import com.example.rummates.classes.Item;
 
 import java.util.ArrayList;
-
-//TODO: comments on item (maybe as recyclerView?)
-//TODO: menu on item
 
 public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapter.ViewHolder>{
 
@@ -40,12 +38,16 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView sliName, sliMenu;
         CheckBox sliCheckBox;
+        RecyclerView sliCommentsRV;
+
 
         public ViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
             sliName = itemView.findViewById(R.id.sli_name);
             sliCheckBox = itemView.findViewById(R.id.sli_checkbox);
             sliMenu  = itemView.findViewById(R.id.sli_menu);
+            sliCommentsRV = itemView.findViewById(R.id.sli_recyclerview);
+            sliCommentsRV.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
 
             itemView.setOnClickListener(new View.OnClickListener()
             {
@@ -118,6 +120,15 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
                 }}); popup.show();
             }
         });
+
+        //comments
+        ArrayList<CommentGroupModel> comments = new ArrayList<>();
+        CommentGroupModel cgm = new CommentGroupModel("Comments", currentItem.getComments());
+        comments.add(cgm);
+
+        CommentAdapter commentAdapter = new CommentAdapter(comments);
+        holder.sliCommentsRV.setAdapter(commentAdapter);
+
     }
 
 

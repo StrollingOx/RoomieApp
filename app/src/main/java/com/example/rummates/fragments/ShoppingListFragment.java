@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.rummates.R;
 import com.example.rummates.adapters.ShoppingListAdapter;
+import com.example.rummates.classes.Comment;
 import com.example.rummates.classes.Item;
 
 import java.util.ArrayList;
@@ -47,10 +48,19 @@ public class ShoppingListFragment extends Fragment {
     private void initShoppingList() {
         shoppingList.add(new Item("KREWETKI", true));
         shoppingList.add(new Item("MARCHEWKI", true));
-        shoppingList.add(new Item("Kość", false));
+        ArrayList<Comment> aList = new ArrayList<>();
+        aList.add(new Comment("Kolega z drużyny niebieskich", "Kiedyś miałem taką sytuacje, że pies nasrał mi pod płotem. Zdenerwowałem się, w końcu to ja codziennie rano płotek poleruje moją piękną chusteczką po świetej pamięci babuni. A więc co mam zrobić z tym małym skurwysynem? Otruje jebańca. Otruje go tak, że pójdzie śladem babci a ta mu jeszcze dupe złoi. O. To jest plan. "));
+        aList.add(new Comment("Człowiek(?)", "Jestem człowiekiem."));
+        shoppingList.add(new Item("Kość", false, new ArrayList<Comment>(aList)));
         shoppingList.add(new Item("Szynka", false));
         shoppingList.add(new Item("Karkówka", false));
         shoppingList.add(new Item("Parówka", false));
+
+        aList.clear();
+        aList.add(new Comment("StrollingOx", "Plz dużo"));
+        aList.add(new Comment("StrollingOx", "Plz solone"));
+        aList.add(new Comment("StrollingOx", "Plz szybko kurde NO KURDE SZYBKO"));
+        shoppingList.add(new Item("Cziperki", true, aList));
     }
 
     private void initRecyclerView(View view){

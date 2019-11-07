@@ -32,14 +32,15 @@
         android:textSize="20sp"
         android:textStyle="bold" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/sl_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/sli_name"
-            android:layout_toEndOf="@id/sli_checkbox"
-            android:layout_marginEnd="80dp"/>
 
+
+        <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/sli_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sli_name"
+        android:layout_toEndOf="@id/sli_checkbox"
+        android:layout_marginEnd="80dp"/>
 
 
         <TextView
@@ -59,3 +60,4 @@
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>
+

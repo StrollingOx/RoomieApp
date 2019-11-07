@@ -27,8 +27,6 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
-//TODO:Rename to 'LoginActivity'
-//TODO:Create TabLayoutActivtiy(Which will be our new main activity after logging in)
 public class LoginActivity extends AppCompatActivity {
 
     private LoginButton loginButton;
@@ -98,7 +96,6 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(getBaseContext(), status, Toast.LENGTH_LONG).show();
                 if(Integer.parseInt(status) == 201){
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                    //TODO go to Michal's user page
                 }
             }
         });
