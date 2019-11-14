@@ -87,7 +87,6 @@ public class ShoppingListEndpoint {
     {
         switch(id){
             case 0: return SERVER_SHOPPING + "/5dc6ba9c2585a92b30b3fb81";
-            case 1: return SERVER_SHOPPING; //TODO: Ask Adven
             default:
                 return SERVER_URL;
         }
