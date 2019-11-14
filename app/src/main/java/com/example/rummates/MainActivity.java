@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.example.rummates.dialogs.AddCommentDialog;
 import com.example.rummates.fragments.notes.NotesFragment;
 import com.example.rummates.fragments.ShoppingListFragment;
 import com.example.rummates.fragments.ProfileFragment;
@@ -50,4 +51,5 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
     };
+
 }

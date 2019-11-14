@@ -13,17 +13,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.rummates.R;
 import com.example.rummates.adapters.ShoppingListAdapter;
-import com.example.rummates.classes.Comment;
-import com.example.rummates.classes.Item;
+import com.example.rummates.controllers.EndpointController;
+import com.example.rummates.entities.shoppinglistEntity.Comment;
+import com.example.rummates.entities.shoppinglistEntity.Item;
+import com.example.rummates.entities.shoppinglistEntity.ShoppingListEntity;
 
 import java.util.ArrayList;
 
 public class ShoppingListFragment extends Fragment {
 
-    private ArrayList<Item> shoppingList = new ArrayList<>();
+    private ArrayList<Item> shoppingList;
     private RecyclerView shoppingListRV;
     private RecyclerView.LayoutManager layoutManager;
     private ShoppingListAdapter shoppingListAdapter;
+    private ShoppingListEntity shoppingListEntity;
 
     @Nullable
     @Override
@@ -46,10 +49,15 @@ public class ShoppingListFragment extends Fragment {
     }
 
     private void initShoppingList() {
+        shoppingListEntity = EndpointController.getInstance(getContext()).getShoppingListsForGroup();
+
+        shoppingList = new ArrayList<Item>(shoppingListEntity.getLists().get(0).getProducts());
+        /*
+        shoppingList = new ArrayList<>();
         shoppingList.add(new Item("KREWETKI", true));
         shoppingList.add(new Item("MARCHEWKI", true));
         ArrayList<Comment> aList = new ArrayList<>();
-        aList.add(new Comment("Kolega z drużyny niebieskich", "Kiedyś miałem taką sytuacje, że pies nasrał mi pod płotem. Zdenerwowałem się, w końcu to ja codziennie rano płotek poleruje moją piękną chusteczką po świetej pamięci babuni. A więc co mam zrobić z tym małym skurwysynem? Otruje jebańca. Otruje go tak, że pójdzie śladem babci a ta mu jeszcze dupe złoi. O. To jest plan. "));
+        aList.add(new Comment("Kolega z drużyny niebieskich", "Kiedyś miałem taką sytuacje, że pies nasrał mi pod płotem. (...) ze dupe złoi. O. To jest plan. "));
         aList.add(new Comment("Człowiek(?)", "Jestem człowiekiem."));
         shoppingList.add(new Item("Kość", false, new ArrayList<Comment>(aList)));
         shoppingList.add(new Item("Szynka", false));
@@ -61,12 +69,14 @@ public class ShoppingListFragment extends Fragment {
         aList.add(new Comment("StrollingOx", "Plz solone"));
         aList.add(new Comment("StrollingOx", "Plz szybko kurde NO KURDE SZYBKO"));
         shoppingList.add(new Item("Cziperki", true, aList));
+        */
+
     }
 
     private void initRecyclerView(View view){
         shoppingListRV = view.findViewById(R.id.sl_recyclerview);
         layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL,false);
-        shoppingListAdapter = new ShoppingListAdapter(shoppingList);
+        shoppingListAdapter = new ShoppingListAdapter(shoppingList, getContext());
         shoppingListRV.setLayoutManager(layoutManager);
         shoppingListRV.setAdapter(shoppingListAdapter);
     }

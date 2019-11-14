@@ -1,5 +1,6 @@
 package com.example.rummates.adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,10 +13,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.rummates.MainActivity;
 import com.example.rummates.R;
 import com.example.rummates.adapters.expandableadapter.CommentAdapter;
 import com.example.rummates.adapters.expandableadapter.CommentGroupModel;
-import com.example.rummates.classes.Item;
+import com.example.rummates.entities.shoppinglistEntity.Item;
+import com.example.rummates.dialogs.AddCommentDialog;
 
 import java.util.ArrayList;
 
@@ -23,6 +26,12 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
 
     private ArrayList<Item> arrayItems;
     private OnItemClickListener sliListener;
+    private Context mContext;
+
+    public ShoppingListAdapter(ArrayList<Item> shoppingList, Context context) {
+        this.arrayItems = shoppingList;
+        this.mContext = context;
+    }
 
     public interface OnItemClickListener {
         void onItemClick(int position);
@@ -68,11 +77,6 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         }
     }
 
-
-    public ShoppingListAdapter(ArrayList<Item> itemList) {
-        this.arrayItems = itemList;
-    }
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -102,7 +106,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.slim_add_comment:
-                                //handle menu1 click
+                                openDialog(position);
                                 return true;
                             case R.id.slim_delete:
                                 arrayItems.remove(position);
@@ -138,4 +142,8 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         return arrayItems.size();
     }
 
+    private void openDialog(int position){
+        AddCommentDialog addCommentDialog = new AddCommentDialog(position);
+        addCommentDialog.show(((MainActivity)mContext).getSupportFragmentManager(), "dialog");
+    }
 }

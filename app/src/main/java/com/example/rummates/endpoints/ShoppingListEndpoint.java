@@ -10,13 +10,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.concurrent.ExecutionException;
 
-public class PostsEndpoint {
-    //TODO:RENAME!!! (this is notes endpoint now)
+//TODO: Merge with PostsEndpoint/NotesEndpoint (we don't need two almost identical classes)
+public class ShoppingListEndpoint {
     private static final String USER_AGENT = "Mozilla/5.0";
     private static final String SERVER_URL = "https://rumies.herokuapp.com";
-    private static final String SERVER_POSTS = "https://rumies.herokuapp.com/notes";
+    private static final String SERVER_SHOPPING = "https://rumies.herokuapp.com/groups/shopping";
 
-    public String getAllPosts(){
+    public String getAllShoppingLists(){
         NetworkConnector networkConnector = new NetworkConnector();
         String response;
         try {
@@ -29,18 +29,18 @@ public class PostsEndpoint {
         return response;
     }
 
-    public String getFirstPost(){
-        NetworkConnector networkConnector = new NetworkConnector();
-        String response;
-        try {
-            response = networkConnector.execute(1).get();
-        } catch (ExecutionException e) {
-            response = "EXECUTION_EXCEPTION";
-        } catch (InterruptedException e) {
-            response = "INTERRUPTED_EXCEPTION";
-        }
-        return response;
-    }
+//    public String getFirstShoppingList(){
+//        NetworkConnector networkConnector = new NetworkConnector();
+//        String response;
+//        try {
+//            response = networkConnector.execute(1).get();
+//        } catch (ExecutionException e) {
+//            response = "EXECUTION_EXCEPTION";
+//        } catch (InterruptedException e) {
+//            response = "INTERRUPTED_EXCEPTION";
+//        }
+//        return response;
+//    }
 
 
     @SuppressLint("StaticFieldLeak")
@@ -86,8 +86,8 @@ public class PostsEndpoint {
     private String selector(Integer id)
     {
         switch(id){
-            case 0: return SERVER_POSTS;
-            case 1: return SERVER_POSTS + "/5da8e600b5d6e426d4d6ef0b";
+            case 0: return SERVER_SHOPPING + "/5dc6ba9c2585a92b30b3fb81";
+            case 1: return SERVER_SHOPPING; //TODO: Ask Adven
             default:
                 return SERVER_URL;
         }

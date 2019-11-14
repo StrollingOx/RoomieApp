@@ -5,7 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.rummates.R;
-import com.example.rummates.classes.Comment;
+import com.example.rummates.entities.shoppinglistEntity.Comment;
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 

@@ -1,11 +1,23 @@
-package com.example.rummates.classes;
+package com.example.rummates.entities.shoppinglistEntity;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class Comment implements Parcelable {
+    @SerializedName("nick")
+    @Expose
     private String username;
+    @SerializedName("content")
+    @Expose
     private String description;
+
+    public Comment(String description) {
+        this.username = "unknown";
+        this.description = description;
+    }
 
     public Comment(String username, String description) {
         this.username = username;

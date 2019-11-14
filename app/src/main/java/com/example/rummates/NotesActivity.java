@@ -5,7 +5,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.rummates.controllers.TestController;
+import com.example.rummates.controllers.EndpointController;
 import com.example.rummates.entities.testEntity.PostEntity;
 import com.example.rummates.entities.testEntity.Post;
 
@@ -26,7 +26,7 @@ public class NotesActivity extends AppCompatActivity {
         date = findViewById(R.id.date_value);
         __v = findViewById(R.id.__v_value);
 
-        firstPost = TestController.getInstance(getBaseContext()).getFirstPost();
+        firstPost = EndpointController.getInstance(getBaseContext()).getFirstPost();
 
         id.setText(firstPost.get_id());
         title.setText(firstPost.getTitle());

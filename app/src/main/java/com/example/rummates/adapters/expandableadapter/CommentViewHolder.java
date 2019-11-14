@@ -4,7 +4,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.rummates.R;
-import com.example.rummates.classes.Comment;
+import com.example.rummates.entities.shoppinglistEntity.Comment;
 import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder;
 
 public class CommentViewHolder extends ChildViewHolder {
