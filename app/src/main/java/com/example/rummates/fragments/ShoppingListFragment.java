@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.rummates.R;
 import com.example.rummates.adapters.ShoppingListAdapter;
 import com.example.rummates.controllers.EndpointController;
+import com.example.rummates.endpoints.ShoppingListEndpoint;
 import com.example.rummates.entities.shoppinglistEntity.Comment;
 import com.example.rummates.entities.shoppinglistEntity.Item;
 import com.example.rummates.entities.shoppinglistEntity.ShoppingListEntity;
@@ -26,8 +28,11 @@ public class ShoppingListFragment extends Fragment {
     private ArrayList<Item> shoppingList;
     private RecyclerView shoppingListRV;
     private RecyclerView.LayoutManager layoutManager;
+
     private ShoppingListAdapter shoppingListAdapter;
     private ShoppingListEntity shoppingListEntity;
+
+    private Button addButton;
 
     @Nullable
     @Override
@@ -36,6 +41,17 @@ public class ShoppingListFragment extends Fragment {
 
         initShoppingList();
         initRecyclerView(view);
+
+        addButton = (Button) view.findViewById(R.id.button_add_record);
+
+        addButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                shoppingListEntity.getLists().get(0).getProducts().add(new Item("TEST_ITEM", true));
+                ShoppingListEndpoint sle = new ShoppingListEndpoint();
+                sle.updateDatabase(shoppingListEntity);
+            }
+        });
 
         //TODO:On item click implementation
         /*
@@ -51,8 +67,6 @@ public class ShoppingListFragment extends Fragment {
 
     private void initShoppingList() {
         shoppingListEntity = EndpointController.getInstance(getContext()).getShoppingListsForGroup();
-        System.out.println("\n\n"+ShoppingListSerializer.shoppingListEntitySerializer(shoppingListEntity)+"\n\n");
-
         shoppingList = new ArrayList<Item>(shoppingListEntity.getLists().get(0).getProducts());
         /*
         shoppingList = new ArrayList<>();

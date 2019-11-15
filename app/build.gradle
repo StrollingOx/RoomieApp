@@ -54,5 +54,9 @@ dependencies {
     //profileactivity
     implementation 'com.android.volley:volley:1.1.0'
 
+    //mongo
+    //implementation 'org.mongodb:mongo-java-driver:3.4.0'
+    implementation 'org.mongodb:mongodb-driver-legacy:3.11.2'
+
 
 }

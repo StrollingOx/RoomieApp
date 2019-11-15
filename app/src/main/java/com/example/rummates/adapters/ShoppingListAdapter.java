@@ -17,12 +17,15 @@ import com.example.rummates.MainActivity;
 import com.example.rummates.R;
 import com.example.rummates.adapters.expandableadapter.CommentAdapter;
 import com.example.rummates.adapters.expandableadapter.CommentGroupModel;
+import com.example.rummates.entities.shoppinglistEntity.Comment;
 import com.example.rummates.entities.shoppinglistEntity.Item;
 import com.example.rummates.dialogs.AddCommentDialog;
 
 import java.util.ArrayList;
 
 public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapter.ViewHolder>{
+
+    private final String TAG = "ShoppingListAdapter";
 
     private ArrayList<Item> arrayItems;
     private OnItemClickListener sliListener;
@@ -106,7 +109,9 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.slim_add_comment:
-                                openDialog(position);
+                                //openDialog();
+                                arrayItems.get(position).getComments().add(new Comment("unknown", "TEST COMMENT"));
+                                notifyItemChanged(position);
                                 return true;
                             case R.id.slim_delete:
                                 arrayItems.remove(position);
@@ -115,8 +120,8 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
                             case R.id.slim_create_notification:
                                 //handle menu3 click
                                 return true;
-                            case R.id.slim_details:
-                                //handle menu4 click
+                            case R.id.slim_refresh:
+                                notifyItemChanged(position);
                                 return true;
                             default:
                                 return false;
@@ -132,7 +137,6 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
 
         CommentAdapter commentAdapter = new CommentAdapter(comments);
         holder.sliCommentsRV.setAdapter(commentAdapter);
-
     }
 
 
@@ -142,8 +146,8 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         return arrayItems.size();
     }
 
-    private void openDialog(int position){
-        AddCommentDialog addCommentDialog = new AddCommentDialog(position);
+    private void openDialog(){
+        AddCommentDialog addCommentDialog = new AddCommentDialog();
         addCommentDialog.show(((MainActivity)mContext).getSupportFragmentManager(), "dialog");
     }
 }

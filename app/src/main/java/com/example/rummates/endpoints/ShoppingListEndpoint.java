@@ -4,6 +4,16 @@ import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.example.rummates.entities.shoppinglistEntity.ShoppingListEntity;
+import com.example.rummates.serializer.ShoppingListSerializer;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+
+import org.bson.Document;
+import org.bson.conversions.Bson;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -15,6 +25,7 @@ public class ShoppingListEndpoint {
     private static final String USER_AGENT = "Mozilla/5.0";
     private static final String SERVER_URL = "https://rumies.herokuapp.com";
     private static final String SERVER_SHOPPING = "https://rumies.herokuapp.com/groups/shopping";
+    private final String TAG = "ShoppingListEndpoint";
 
     public String getAllShoppingLists(){
         NetworkConnector networkConnector = new NetworkConnector();
@@ -27,6 +38,12 @@ public class ShoppingListEndpoint {
             response = "INTERRUPTED_EXCEPTION";
         }
         return response;
+    }
+
+    public void updateDatabase(ShoppingListEntity shoppingListEntity){
+        DatabaseConnector databaseConnector = new DatabaseConnector();
+        databaseConnector.execute(shoppingListEntity);
+
     }
 
 //    public String getFirstShoppingList(){
@@ -83,6 +100,71 @@ public class ShoppingListEndpoint {
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
+    private class DatabaseConnector extends AsyncTask<Object, Void, String>{
+
+        @Override
+        protected String doInBackground(Object... objects) {
+            StringBuilder response = new StringBuilder();
+
+            //String uri = "mongodb+srv://edmin:karolkrawczyk@rumies-df76j.azure.mongodb.net/test?retryWrites=true&w=majority";
+            @SuppressLint("AuthLeak") String uri = "mongodb://edmin:karolkrawczyk@rumies-shard-00-00-df76j.azure.mongodb.net:27017,rumies-shard-00-01-df76j.azure.mongodb.net:27017,rumies-shard-00-02-df76j.azure.mongodb.net:27017/test?ssl=true&replicaSet=Rumies-shard-0&authSource=admin&retryWrites=true&w=majority";
+            String databaseName = "test";
+            String collectionName = "groups";
+            Document search = new Document("group_name", "Roomies Dev");
+
+            MongoClientURI clientURI;
+            MongoClient mongoClient;
+            MongoDatabase mongoDatabase;
+            MongoCollection collection;
+            try {
+                clientURI = new MongoClientURI(uri);
+                mongoClient = new MongoClient(clientURI);
+                mongoDatabase = mongoClient.getDatabase(databaseName);
+                collection = mongoDatabase.getCollection(collectionName);
+            }catch(Exception e)
+            {
+                return "connection-exception";
+            }
+            //Log.d(TAG, "Connected to Database");
+
+            Document found = (Document) collection.find(search).first();
+            if(found != null){
+                Bson updatedDocument = Document.parse(ShoppingListSerializer.shoppingListEntitySerializer((ShoppingListEntity)objects[0]));
+                Bson updateOperation = new Document("$set", updatedDocument);
+                collection.updateOne(found, updateOperation);
+                return "ok";
+                //Log.d(TAG, "Document updated");
+            }else return "err";
+        }
+    }
+
+//    public static void updateDatabase(ShoppingListEntity shoppingListEntity) {
+//        String uri = "mongodb://edmin:karolkrawczyk@rumies-shard-00-00-df76j.azure.mongodb.net:27017,rumies-shard-00-01-df76j.azure.mongodb.net:27017,rumies-shard-00-02-df76j.azure.mongodb.net:27017/test?ssl=true&replicaSet=Rumies-shard-0&authSource=admin&retryWrites=true&w=majority";
+//        //String uri = "mongodb+srv://edmin:karolkrawczyk@rumies-df76j.azure.mongodb.net/test?retryWrites=true&w=majority";
+//        String databaseName = "test";
+//        String collectionName = "groups";
+//        Document search = new Document("group_name", "Roomies Dev");
+//
+//        MongoClientURI clientURI = new MongoClientURI(uri);
+//        MongoClient mongoClient = new MongoClient(clientURI);
+//
+//        MongoDatabase mongoDatabase = mongoClient.getDatabase(databaseName);
+//        MongoCollection collection = mongoDatabase.getCollection(collectionName);
+//
+//        //Log.d(TAG, "Connected to Database");
+//
+//        Document found = (Document) collection.find(search).first();
+//        if(found != null){
+//            Bson updatedDocument = Document.parse(ShoppingListSerializer.shoppingListEntitySerializer(shoppingListEntity));
+//            Bson updateOperation = new Document("$set", updatedDocument);
+//            collection.updateOne(found, updateOperation);
+//            //Log.d(TAG, "Document updated");
+//        }
+//
+//
+//    }
+
     private String selector(Integer id)
     {
         switch(id){
@@ -92,3 +174,30 @@ public class ShoppingListEndpoint {
         }
     }
 }
+
+/*
+
+        String uri = "mongodb://edmin:karolkrawczyk@rumies-shard-00-00-df76j.azure.mongodb.net:27017,rumies-shard-00-01-df76j.azure.mongodb.net:27017,rumies-shard-00-02-df76j.azure.mongodb.net:27017/test?ssl=true&replicaSet=Rumies-shard-0&authSource=admin&retryWrites=true&w=majority";
+        MongoClientURI clientURI = new MongoClientURI(uri);
+        MongoClient mongoClient = new MongoClient(clientURI);
+
+        MongoDatabase mongoDatabase = mongoClient.getDatabase("test");
+        MongoCollection collection = mongoDatabase.getCollection("groups");
+
+        System.out.println("Database Connected");
+
+        Document search = (Document) collection.find(new Document("group_name", "Roomies Dev")).first();
+        System.out.println(search);
+
+        //from Document to json string
+        String json = search.toJson();
+        System.out.println(json);
+
+        //from json string to Document
+        Document doc = Document.parse(json);
+        System.out.println(doc);
+
+        //equals?
+        System.out.println(search.toString().equals(doc.toString()));
+
+ */

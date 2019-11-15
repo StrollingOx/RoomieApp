@@ -11,23 +11,22 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatDialogFragment;
+import androidx.fragment.app.DialogFragment;
 
 import com.example.rummates.R;
+import com.example.rummates.entities.shoppinglistEntity.Comment;
 
-public class AddCommentDialog extends AppCompatDialogFragment {
-    private EditText etComment;
-    private AddCommentDialogListener listener;
-    private final int position;
+import java.util.ArrayList;
+import java.util.Objects;
 
-    public AddCommentDialog(int position) {
-        this.position = position;
-    }
+public class AddCommentDialog extends DialogFragment {
+    public EditText etComment;
+    //private AddCommentDialogListener listener;
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
         View view = getActivity().getLayoutInflater().inflate(R.layout.layout_shoppinglist_addcomentdialog,null);
         etComment = view.findViewById(R.id.sli_add_comment);
 
@@ -39,14 +38,17 @@ public class AddCommentDialog extends AppCompatDialogFragment {
                 .setPositiveButton("add", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        String input = etComment.getText().toString();
+                        if(!input.equals("")){
+                            //TODO:Add comment
+                            //TODO:Add username to comment
+                        }
                         //Need endpoint to finish
-                        //TODO:Add comment
-                        //TODO:Add username to comment
                     }});
 
         return builder.create();
     }
-    public interface AddCommentDialogListener{
-        void applyComment(String description, int position);
-    }
+//    public interface AddCommentDialogListener{
+//        void applyComment(String description, int position);
+//    }
 }
