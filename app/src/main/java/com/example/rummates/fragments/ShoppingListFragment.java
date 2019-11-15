@@ -17,6 +17,7 @@ import com.example.rummates.controllers.EndpointController;
 import com.example.rummates.entities.shoppinglistEntity.Comment;
 import com.example.rummates.entities.shoppinglistEntity.Item;
 import com.example.rummates.entities.shoppinglistEntity.ShoppingListEntity;
+import com.example.rummates.serializer.ShoppingListSerializer;
 
 import java.util.ArrayList;
 
@@ -50,6 +51,7 @@ public class ShoppingListFragment extends Fragment {
 
     private void initShoppingList() {
         shoppingListEntity = EndpointController.getInstance(getContext()).getShoppingListsForGroup();
+        System.out.println("\n\n"+ShoppingListSerializer.shoppingListEntitySerializer(shoppingListEntity)+"\n\n");
 
         shoppingList = new ArrayList<Item>(shoppingListEntity.getLists().get(0).getProducts());
         /*

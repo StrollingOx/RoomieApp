@@ -28,4 +28,9 @@ public class ShoppingListSerializer {
         return gson.fromJson(json, Comment.class);
     }
 
+    public static String shoppingListEntitySerializer(ShoppingListEntity shoppingListEntity){
+        Gson gson = new Gson();
+        return gson.toJson(shoppingListEntity);
+    }
+
 }
