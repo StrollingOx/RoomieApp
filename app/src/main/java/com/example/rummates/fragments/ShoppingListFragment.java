@@ -1,6 +1,7 @@
 package com.example.rummates.fragments;
 
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,8 +49,10 @@ public class ShoppingListFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 shoppingListEntity.getLists().get(0).getProducts().add(new Item("TEST_ITEM", true));
-                ShoppingListEndpoint sle = new ShoppingListEndpoint();
-                sle.updateDatabase(shoppingListEntity);
+
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                StrictMode.setThreadPolicy(policy);
+                EndpointController.getInstance().getShoppingListEndpoint().updateDatabase(shoppingListEntity);
             }
         });
 

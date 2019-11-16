@@ -101,41 +101,50 @@ public class ShoppingListEndpoint {
     }
 
     @SuppressLint("StaticFieldLeak")
-    private class DatabaseConnector extends AsyncTask<Object, Void, String>{
+    private class DatabaseConnector extends AsyncTask<ShoppingListEntity, Void, ShoppingListEntity>{
+
+        //String uri = "mongodb+srv://edmin:karolkrawczyk@rumies-df76j.azure.mongodb.net/test?retryWrites=true&w=majority";
+        @SuppressLint("AuthLeak") String uri = "mongodb://edmin:karolkrawczyk@rumies-shard-00-00-df76j.azure.mongodb.net:27017,rumies-shard-00-01-df76j.azure.mongodb.net:27017,rumies-shard-00-02-df76j.azure.mongodb.net:27017/test?ssl=true&replicaSet=Rumies-shard-0&authSource=admin&retryWrites=true&w=majority";
+        String databaseName = "test";
+        String collectionName = "groups";
+
+        MongoClientURI clientURI;
+        MongoClient mongoClient;
+        MongoDatabase mongoDatabase;
+        MongoCollection collection;
+
+        Document search = new Document("group_name", "Roomies Dev");
+        Document found;
 
         @Override
-        protected String doInBackground(Object... objects) {
+        protected ShoppingListEntity doInBackground(ShoppingListEntity... shoppingListEntities) {
             StringBuilder response = new StringBuilder();
 
-            //String uri = "mongodb+srv://edmin:karolkrawczyk@rumies-df76j.azure.mongodb.net/test?retryWrites=true&w=majority";
-            @SuppressLint("AuthLeak") String uri = "mongodb://edmin:karolkrawczyk@rumies-shard-00-00-df76j.azure.mongodb.net:27017,rumies-shard-00-01-df76j.azure.mongodb.net:27017,rumies-shard-00-02-df76j.azure.mongodb.net:27017/test?ssl=true&replicaSet=Rumies-shard-0&authSource=admin&retryWrites=true&w=majority";
-            String databaseName = "test";
-            String collectionName = "groups";
-            Document search = new Document("group_name", "Roomies Dev");
 
-            MongoClientURI clientURI;
-            MongoClient mongoClient;
-            MongoDatabase mongoDatabase;
-            MongoCollection collection;
             try {
                 clientURI = new MongoClientURI(uri);
                 mongoClient = new MongoClient(clientURI);
                 mongoDatabase = mongoClient.getDatabase(databaseName);
                 collection = mongoDatabase.getCollection(collectionName);
+                found = (Document) collection.find(search).first();
             }catch(Exception e)
             {
-                return "connection-exception";
+                System.out.println("connection-exception");
+                return null;
             }
-            //Log.d(TAG, "Connected to Database");
+            return shoppingListEntities[0];
+        }
 
-            Document found = (Document) collection.find(search).first();
-            if(found != null){
-                Bson updatedDocument = Document.parse(ShoppingListSerializer.shoppingListEntitySerializer((ShoppingListEntity)objects[0]));
+        @Override
+        protected void onPostExecute(ShoppingListEntity shoppingListEntity) {
+            if(shoppingListEntity!=null) {
+                Bson updatedDocument = Document.parse(ShoppingListSerializer.shoppingListEntitySerializer(shoppingListEntity));
                 Bson updateOperation = new Document("$set", updatedDocument);
                 collection.updateOne(found, updateOperation);
-                return "ok";
-                //Log.d(TAG, "Document updated");
-            }else return "err";
+                Log.d(TAG, "Database successfully updated");
+            }else{
+                Log.d(TAG, "Failed to update document on database");
+            }
         }
     }
 

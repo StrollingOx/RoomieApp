@@ -81,4 +81,8 @@ public class EndpointController {
             return new ShoppingListEntity();
         }
     }
+
+    public ShoppingListEndpoint getShoppingListEndpoint() {
+        return shoppingListEndpoint;
+    }
 }
