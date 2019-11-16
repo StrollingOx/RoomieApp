@@ -109,9 +109,9 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.slim_add_comment:
-                                //openDialog();
-                                arrayItems.get(position).getComments().add(new Comment("unknown", "TEST COMMENT"));
-                                notifyItemChanged(position);
+                                openDialog(position);
+                                //arrayItems.get(position).getComments().add(new Comment("unknown", "TEST COMMENT"));
+                                //notifyItemChanged(position);
                                 return true;
                             case R.id.slim_delete:
                                 arrayItems.remove(position);
@@ -146,8 +146,8 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         return arrayItems.size();
     }
 
-    private void openDialog(){
-        AddCommentDialog addCommentDialog = new AddCommentDialog();
+    private void openDialog(int position){
+        AddCommentDialog addCommentDialog = new AddCommentDialog(position);
         addCommentDialog.show(((MainActivity)mContext).getSupportFragmentManager(), "dialog");
     }
 }

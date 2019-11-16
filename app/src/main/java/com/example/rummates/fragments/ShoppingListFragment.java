@@ -2,6 +2,7 @@ package com.example.rummates.fragments;
 
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,15 +17,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.rummates.R;
 import com.example.rummates.adapters.ShoppingListAdapter;
 import com.example.rummates.controllers.EndpointController;
-import com.example.rummates.endpoints.ShoppingListEndpoint;
-import com.example.rummates.entities.shoppinglistEntity.Comment;
 import com.example.rummates.entities.shoppinglistEntity.Item;
 import com.example.rummates.entities.shoppinglistEntity.ShoppingListEntity;
-import com.example.rummates.serializer.ShoppingListSerializer;
 
 import java.util.ArrayList;
 
 public class ShoppingListFragment extends Fragment {
+
+    private final String TAG = "ShoppingListFragment";
 
     private ArrayList<Item> shoppingList;
     private RecyclerView shoppingListRV;
@@ -35,16 +35,31 @@ public class ShoppingListFragment extends Fragment {
 
     private Button addButton;
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_shoppinglist, container, false);
 
-        initShoppingList();
+        updateShoppingList();
         initRecyclerView(view);
+        initTestButton(view);
 
+        //TODO:On item click implementation
+        /*
+        *shoppingListAdapter.setOnItemClickListener(new ShoppingListAdapter.OnItemClickListener() {
+        *    @Override
+        *    public void onItemClick(int position) {
+        *
+        *    }
+        *});
+        */
+
+        return view;
+    }
+
+    private void initTestButton(View view) {
         addButton = (Button) view.findViewById(R.id.button_add_record);
-
         addButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -56,40 +71,17 @@ public class ShoppingListFragment extends Fragment {
             }
         });
 
-        //TODO:On item click implementation
-        /*
-        *shoppingListAdapter.setOnItemClickListener(new ShoppingListAdapter.OnItemClickListener() {
-        *    @Override
-        *    public void onItemClick(int position) {
-        *
-        *    }
-        *});
-        */
-        return view;
+        Log.d(TAG, "TestButton initiated");
     }
 
-    private void initShoppingList() {
+    //TODO: Refresh adapter periodically
+
+    private void updateShoppingList() {
         shoppingListEntity = EndpointController.getInstance(getContext()).getShoppingListsForGroup();
-        shoppingList = new ArrayList<Item>(shoppingListEntity.getLists().get(0).getProducts());
-        /*
-        shoppingList = new ArrayList<>();
-        shoppingList.add(new Item("KREWETKI", true));
-        shoppingList.add(new Item("MARCHEWKI", true));
-        ArrayList<Comment> aList = new ArrayList<>();
-        aList.add(new Comment("Kolega z drużyny niebieskich", "Kiedyś miałem taką sytuacje, że pies nasrał mi pod płotem. (...) ze dupe złoi. O. To jest plan. "));
-        aList.add(new Comment("Człowiek(?)", "Jestem człowiekiem."));
-        shoppingList.add(new Item("Kość", false, new ArrayList<Comment>(aList)));
-        shoppingList.add(new Item("Szynka", false));
-        shoppingList.add(new Item("Karkówka", false));
-        shoppingList.add(new Item("Parówka", false));
+        if(shoppingList != shoppingListEntity.getLists().get(0).getProducts())
+            shoppingList = shoppingListEntity.getLists().get(0).getProducts();
 
-        aList.clear();
-        aList.add(new Comment("StrollingOx", "Plz dużo"));
-        aList.add(new Comment("StrollingOx", "Plz solone"));
-        aList.add(new Comment("StrollingOx", "Plz szybko kurde NO KURDE SZYBKO"));
-        shoppingList.add(new Item("Cziperki", true, aList));
-        */
-
+        Log.d(TAG, "ShoppingList Updated");
     }
 
     private void initRecyclerView(View view){
@@ -98,5 +90,7 @@ public class ShoppingListFragment extends Fragment {
         shoppingListAdapter = new ShoppingListAdapter(shoppingList, getContext());
         shoppingListRV.setLayoutManager(layoutManager);
         shoppingListRV.setAdapter(shoppingListAdapter);
+
+        Log.d(TAG, "RecyclerView initiated");
     }
 }
