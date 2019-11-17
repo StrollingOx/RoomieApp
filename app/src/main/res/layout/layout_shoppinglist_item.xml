@@ -12,7 +12,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ffddcc">
+        android:background="#000000">
 
     <CheckBox
         android:id="@+id/sli_checkbox"
@@ -28,18 +28,19 @@
         android:layout_marginTop="7dp"
         android:layout_toEndOf="@+id/sli_checkbox"
         android:text="PRODUCT NAME"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textSize="20sp"
         android:textStyle="bold" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/sl_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/sli_name"
-            android:layout_toEndOf="@id/sli_checkbox"
-            android:layout_marginEnd="80dp"/>
 
+
+        <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/sli_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sli_name"
+        android:layout_toEndOf="@id/sli_checkbox"
+        android:layout_marginEnd="80dp"/>
 
 
         <TextView
@@ -59,3 +60,4 @@
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>
+

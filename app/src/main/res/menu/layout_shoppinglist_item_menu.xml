@@ -7,6 +7,6 @@
         android:title="Delete" />
     <item android:id="@+id/slim_create_notification"
         android:title="Create notification" />
-    <item android:id="@+id/slim_details"
-        android:title="Details" />
+    <item android:id="@+id/slim_refresh"
+        android:title="Refresh" />
 </menu>

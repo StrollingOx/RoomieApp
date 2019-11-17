@@ -1,6 +1,5 @@
 package com.example.rummates.adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -11,20 +10,32 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.rummates.MainActivity;
 import com.example.rummates.R;
-import com.example.rummates.classes.Item;
+import com.example.rummates.adapters.expandableadapter.CommentAdapter;
+import com.example.rummates.adapters.expandableadapter.CommentGroupModel;
+import com.example.rummates.controllers.EndpointController;
+import com.example.rummates.entities.shoppinglistEntity.Item;
+import com.example.rummates.dialogs.AddCommentDialog;
+import com.example.rummates.entities.shoppinglistEntity.ShoppingListEntity;
 
 import java.util.ArrayList;
 
-//TODO: comments on item (maybe as recyclerView?)
-//TODO: menu on item
-
 public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapter.ViewHolder>{
+
+    private final String TAG = "ShoppingListAdapter";
 
     private ArrayList<Item> arrayItems;
     private OnItemClickListener sliListener;
+    private Context mContext;
+
+    public ShoppingListAdapter(ArrayList<Item> shoppingList, Context context) {
+        this.arrayItems = shoppingList;
+        this.mContext = context;
+    }
 
     public interface OnItemClickListener {
         void onItemClick(int position);
@@ -40,12 +51,16 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView sliName, sliMenu;
         CheckBox sliCheckBox;
+        RecyclerView sliCommentsRV;
+
 
         public ViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
             sliName = itemView.findViewById(R.id.sli_name);
             sliCheckBox = itemView.findViewById(R.id.sli_checkbox);
             sliMenu  = itemView.findViewById(R.id.sli_menu);
+            sliCommentsRV = itemView.findViewById(R.id.sli_recyclerview);
+            sliCommentsRV.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
 
             itemView.setOnClickListener(new View.OnClickListener()
             {
@@ -64,11 +79,6 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
             });
 
         }
-    }
-
-
-    public ShoppingListAdapter(ArrayList<Item> itemList) {
-        this.arrayItems = itemList;
     }
 
     @NonNull
@@ -100,17 +110,20 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.slim_add_comment:
-                                //handle menu1 click
+                                openAddCommentDialog(position);
                                 return true;
                             case R.id.slim_delete:
                                 arrayItems.remove(position);
+                                ShoppingListEntity shoppingListEntity = EndpointController.getInstance().getShoppingListsForGroup();
+                                shoppingListEntity.getLists().get(0).getProducts().remove(position);
+                                EndpointController.getInstance().getShoppingListEndpoint().updateDatabase(shoppingListEntity);
                                 notifyItemRemoved(position);
                                 return true;
                             case R.id.slim_create_notification:
                                 //handle menu3 click
                                 return true;
-                            case R.id.slim_details:
-                                //handle menu4 click
+                            case R.id.slim_refresh:
+                                notifyItemChanged(position);
                                 return true;
                             default:
                                 return false;
@@ -118,6 +131,14 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
                 }}); popup.show();
             }
         });
+
+        //comments
+        ArrayList<CommentGroupModel> comments = new ArrayList<>();
+        CommentGroupModel cgm = new CommentGroupModel("Comments", currentItem.getComments());
+        comments.add(cgm);
+
+        CommentAdapter commentAdapter = new CommentAdapter(comments);
+        holder.sliCommentsRV.setAdapter(commentAdapter);
     }
 
 
@@ -127,4 +148,8 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         return arrayItems.size();
     }
 
+    private void openAddCommentDialog(int position){
+        AddCommentDialog addCommentDialog = new AddCommentDialog(position);
+        addCommentDialog.show(((MainActivity)mContext).getSupportFragmentManager(), "dialog");
+    }
 }

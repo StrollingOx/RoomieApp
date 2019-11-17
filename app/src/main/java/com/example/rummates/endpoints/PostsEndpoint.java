@@ -11,6 +11,7 @@ import java.net.URL;
 import java.util.concurrent.ExecutionException;
 
 public class PostsEndpoint {
+    //TODO:RENAME!!! (this is notes endpoint now)
     private static final String USER_AGENT = "Mozilla/5.0";
     private static final String SERVER_URL = "https://rumies.herokuapp.com";
     private static final String SERVER_POSTS = "https://rumies.herokuapp.com/notes";

@@ -1,4 +1,4 @@
-package com.example.rummates.fragments;
+package com.example.rummates.fragments.notes;
 
 import android.content.Context;
 import android.content.Intent;

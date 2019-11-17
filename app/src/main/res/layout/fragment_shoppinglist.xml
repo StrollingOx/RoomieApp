@@ -1,14 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:tag="shoppinglist_tag"
+    tools:context="com.example.rummates.MainActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/sl_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="24dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="24dp"
-        android:layout_marginBottom="10dp" />
+        android:layout_marginTop="100dp"
+        android:layout_marginRight="24dp"/>
+
+    <Button
+        android:id="@+id/button_add_record"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="24dp"
+        android:textSize="30sp"
+        android:text="+" />
 
 </RelativeLayout>

@@ -7,9 +7,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.example.rummates.fragments.NotesFragment;
+import com.example.rummates.fragments.notes.NotesFragment;
 import com.example.rummates.fragments.ShoppingListFragment;
-import com.example.rummates.fragments.TempFragmentProfile;
+import com.example.rummates.fragments.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -34,20 +34,21 @@ public class MainActivity extends AppCompatActivity {
 
             switch(item.getItemId())
             {
-                case R.id.bottom_nav1:
+                case R.id.bottom_nav_shoppinglist:
                     selectedFragment = new ShoppingListFragment();
                     break;
 
-                case R.id.bottom_nav2:
+                case R.id.bottom_nav_notes:
                     selectedFragment = new NotesFragment();
                     break;
 
-                case R.id.bottom_nav3:
-                    selectedFragment = new TempFragmentProfile();
+                case R.id.bottom_nav_profile:
+                    selectedFragment = new ProfileFragment();
                     break;
             }
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,selectedFragment).commit();
             return true;
         }
     };
+
 }

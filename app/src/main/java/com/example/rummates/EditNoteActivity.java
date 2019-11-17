@@ -9,8 +9,8 @@ import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.example.rummates.fragments.NotesFragment;
-import com.example.rummates.fragments.NotesViewModel;
+import com.example.rummates.fragments.notes.NotesFragment;
+import com.example.rummates.fragments.notes.NotesViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
