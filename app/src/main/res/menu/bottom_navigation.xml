@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/bottom_nav1"
-        android:icon="@drawable/ic_launcher_background"
+        android:id="@+id/bottom_nav_shoppinglist"
+        android:icon="@drawable/ic_bottom_nav_shoppinglist"
         android:title="Shopping List"/>
 
     <item
-        android:id="@+id/bottom_nav2"
-        android:icon="@drawable/ic_launcher_background"
+        android:id="@+id/bottom_nav_notes"
+        android:icon="@drawable/ic_bottom_nav_notes"
         android:title="Notes"/>
 
     <item
-        android:id="@+id/bottom_nav3"
-        android:icon="@drawable/ic_launcher_background"
+        android:id="@+id/bottom_nav_profile"
+        android:icon="@drawable/ic_bottom_nav_profile"
         android:title="Profile"/>
 
 </menu>
