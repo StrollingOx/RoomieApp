@@ -11,12 +11,15 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.rummates.MainActivity;
 import com.example.rummates.R;
 import com.example.rummates.adapters.ShoppingListAdapter;
 import com.example.rummates.controllers.EndpointController;
+import com.example.rummates.dialogs.AddProductDialog;
 import com.example.rummates.entities.shoppinglistEntity.Item;
 import com.example.rummates.entities.shoppinglistEntity.ShoppingListEntity;
 
@@ -45,16 +48,6 @@ public class ShoppingListFragment extends Fragment {
         initRecyclerView(view);
         initTestButton(view);
 
-        //TODO:On item click implementation
-        /*
-        *shoppingListAdapter.setOnItemClickListener(new ShoppingListAdapter.OnItemClickListener() {
-        *    @Override
-        *    public void onItemClick(int position) {
-        *
-        *    }
-        *});
-        */
-
         return view;
     }
 
@@ -63,9 +56,8 @@ public class ShoppingListFragment extends Fragment {
         addButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                shoppingListEntity.getLists().get(0).getProducts().add(new Item("TEST_ITEM", true));
-
-                EndpointController.getInstance().getShoppingListEndpoint().updateDatabase(shoppingListEntity);
+                AddProductDialog addProductDialog = new AddProductDialog();
+                addProductDialog.show((getActivity()).getSupportFragmentManager(), "dialog");
             }
         });
 
@@ -92,3 +84,13 @@ public class ShoppingListFragment extends Fragment {
         Log.d(TAG, "RecyclerView initiated");
     }
 }
+
+//on item click implementation
+/*
+ *shoppingListAdapter.setOnItemClickListener(new ShoppingListAdapter.OnItemClickListener() {
+ *    @Override
+ *    public void onItemClick(int position) {
+ *
+ *    }
+ *});
+ */

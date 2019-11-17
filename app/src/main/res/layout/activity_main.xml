@@ -5,7 +5,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@color/colorAccent">
 
     <FrameLayout
         android:id="@+id/fragment_container"
@@ -19,6 +20,7 @@
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         app:menu="@menu/bottom_navigation"
+        app:itemBackground="@color/colorAccentSecondary"
         android:background="?android:attr/windowBackground"/>
 
 

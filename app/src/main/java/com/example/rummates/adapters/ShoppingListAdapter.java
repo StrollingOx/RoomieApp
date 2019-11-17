@@ -18,7 +18,6 @@ import com.example.rummates.R;
 import com.example.rummates.adapters.expandableadapter.CommentAdapter;
 import com.example.rummates.adapters.expandableadapter.CommentGroupModel;
 import com.example.rummates.controllers.EndpointController;
-import com.example.rummates.entities.shoppinglistEntity.Comment;
 import com.example.rummates.entities.shoppinglistEntity.Item;
 import com.example.rummates.dialogs.AddCommentDialog;
 import com.example.rummates.entities.shoppinglistEntity.ShoppingListEntity;
@@ -111,9 +110,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.slim_add_comment:
-                                openDialog(position);
-                                //arrayItems.get(position).getComments().add(new Comment("unknown", "TEST COMMENT"));
-                                //notifyItemChanged(position);
+                                openAddCommentDialog(position);
                                 return true;
                             case R.id.slim_delete:
                                 arrayItems.remove(position);
@@ -151,7 +148,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         return arrayItems.size();
     }
 
-    private void openDialog(int position){
+    private void openAddCommentDialog(int position){
         AddCommentDialog addCommentDialog = new AddCommentDialog(position);
         addCommentDialog.show(((MainActivity)mContext).getSupportFragmentManager(), "dialog");
     }

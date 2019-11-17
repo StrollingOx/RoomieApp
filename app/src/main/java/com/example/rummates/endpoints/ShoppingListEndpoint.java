@@ -21,14 +21,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.concurrent.ExecutionException;
 
-//TODO: Merge with PostsEndpoint/NotesEndpoint (we don't need two almost identical classes)
 public class ShoppingListEndpoint {
     private static final String USER_AGENT = "Mozilla/5.0";
     private static final String SERVER_URL = "https://rumies.herokuapp.com";
     private static final String SERVER_SHOPPING = "https://rumies.herokuapp.com/groups/shopping";
     private final String TAG = "ShoppingListEndpoint";
 
-    public String getAllShoppingLists(){
+    public String getShoppingListsFromGroup(){
         NetworkConnector networkConnector = new NetworkConnector();
         String response;
         try {
@@ -41,27 +40,13 @@ public class ShoppingListEndpoint {
         return response;
     }
 
-    public void updateDatabase(ShoppingListEntity shoppingListEntity){
+    public String updateDatabase(ShoppingListEntity shoppingListEntity){
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         DatabaseConnector databaseConnector = new DatabaseConnector();
         databaseConnector.execute(shoppingListEntity);
-
+        return "done";
     }
-
-//    public String getFirstShoppingList(){
-//        NetworkConnector networkConnector = new NetworkConnector();
-//        String response;
-//        try {
-//            response = networkConnector.execute(1).get();
-//        } catch (ExecutionException e) {
-//            response = "EXECUTION_EXCEPTION";
-//        } catch (InterruptedException e) {
-//            response = "INTERRUPTED_EXCEPTION";
-//        }
-//        return response;
-//    }
-
 
     @SuppressLint("StaticFieldLeak")
     private class NetworkConnector extends AsyncTask<Object, Void, String> {
@@ -120,8 +105,6 @@ public class ShoppingListEndpoint {
 
         @Override
         protected ShoppingListEntity doInBackground(ShoppingListEntity... shoppingListEntities) {
-            StringBuilder response = new StringBuilder();
-
 
             try {
                 clientURI = new MongoClientURI(uri);
@@ -148,33 +131,8 @@ public class ShoppingListEndpoint {
                 Log.d(TAG, "Failed to update document on database");
             }
         }
-    }
 
-//    public static void updateDatabase(ShoppingListEntity shoppingListEntity) {
-//        String uri = "mongodb://edmin:karolkrawczyk@rumies-shard-00-00-df76j.azure.mongodb.net:27017,rumies-shard-00-01-df76j.azure.mongodb.net:27017,rumies-shard-00-02-df76j.azure.mongodb.net:27017/test?ssl=true&replicaSet=Rumies-shard-0&authSource=admin&retryWrites=true&w=majority";
-//        //String uri = "mongodb+srv://edmin:karolkrawczyk@rumies-df76j.azure.mongodb.net/test?retryWrites=true&w=majority";
-//        String databaseName = "test";
-//        String collectionName = "groups";
-//        Document search = new Document("group_name", "Roomies Dev");
-//
-//        MongoClientURI clientURI = new MongoClientURI(uri);
-//        MongoClient mongoClient = new MongoClient(clientURI);
-//
-//        MongoDatabase mongoDatabase = mongoClient.getDatabase(databaseName);
-//        MongoCollection collection = mongoDatabase.getCollection(collectionName);
-//
-//        //Log.d(TAG, "Connected to Database");
-//
-//        Document found = (Document) collection.find(search).first();
-//        if(found != null){
-//            Bson updatedDocument = Document.parse(ShoppingListSerializer.shoppingListEntitySerializer(shoppingListEntity));
-//            Bson updateOperation = new Document("$set", updatedDocument);
-//            collection.updateOne(found, updateOperation);
-//            //Log.d(TAG, "Document updated");
-//        }
-//
-//
-//    }
+    }
 
     private String selector(Integer id)
     {

@@ -29,7 +29,6 @@ public class AddCommentDialog extends DialogFragment {
     public AddCommentDialog(int position) {
         this.position = position;
     }
-    //private AddCommentDialogListener listener;
 
     @NonNull
     @Override
@@ -50,17 +49,11 @@ public class AddCommentDialog extends DialogFragment {
                         if(!input.equals("")){
                             ShoppingListEntity shoppingListEntity = EndpointController.getInstance().getShoppingListsForGroup();
                             shoppingListEntity.getLists().get(0).getProducts().get(position).addComment(new Comment(input));
-
                             EndpointController.getInstance().getShoppingListEndpoint().updateDatabase(shoppingListEntity);
-                            //TODO:Add comment
                             //TODO:Add username to comment
                         }
-                        //Need endpoint to finish
                     }});
 
         return builder.create();
     }
-//    public interface AddCommentDialogListener{
-//        void applyComment(String description, int position);
-//    }
 }

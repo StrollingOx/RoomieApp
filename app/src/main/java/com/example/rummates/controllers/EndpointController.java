@@ -72,7 +72,7 @@ public class EndpointController {
         ShoppingListEntity shoppingListEntity = null;
 
         try{
-            shoppingListEntity = ShoppingListSerializer.shoppingListEntityDeserializer(shoppingListEndpoint.getAllShoppingLists());
+            shoppingListEntity = ShoppingListSerializer.shoppingListEntityDeserializer(shoppingListEndpoint.getShoppingListsFromGroup());
             Log.d("Info", "Loading data from rumies.herokuapp.com/groups/shopping/5dc6ba9c2585a92b30b3fb81.");
             return shoppingListEntity;
 
