@@ -65,8 +65,6 @@ public class ShoppingListFragment extends Fragment {
             public void onClick(View view) {
                 shoppingListEntity.getLists().get(0).getProducts().add(new Item("TEST_ITEM", true));
 
-                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-                StrictMode.setThreadPolicy(policy);
                 EndpointController.getInstance().getShoppingListEndpoint().updateDatabase(shoppingListEntity);
             }
         });

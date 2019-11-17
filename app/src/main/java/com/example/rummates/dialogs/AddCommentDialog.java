@@ -50,8 +50,7 @@ public class AddCommentDialog extends DialogFragment {
                         if(!input.equals("")){
                             ShoppingListEntity shoppingListEntity = EndpointController.getInstance().getShoppingListsForGroup();
                             shoppingListEntity.getLists().get(0).getProducts().get(position).addComment(new Comment(input));
-                            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-                            StrictMode.setThreadPolicy(policy);
+
                             EndpointController.getInstance().getShoppingListEndpoint().updateDatabase(shoppingListEntity);
                             //TODO:Add comment
                             //TODO:Add username to comment

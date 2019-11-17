@@ -17,9 +17,11 @@ import com.example.rummates.MainActivity;
 import com.example.rummates.R;
 import com.example.rummates.adapters.expandableadapter.CommentAdapter;
 import com.example.rummates.adapters.expandableadapter.CommentGroupModel;
+import com.example.rummates.controllers.EndpointController;
 import com.example.rummates.entities.shoppinglistEntity.Comment;
 import com.example.rummates.entities.shoppinglistEntity.Item;
 import com.example.rummates.dialogs.AddCommentDialog;
+import com.example.rummates.entities.shoppinglistEntity.ShoppingListEntity;
 
 import java.util.ArrayList;
 
@@ -115,6 +117,9 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
                                 return true;
                             case R.id.slim_delete:
                                 arrayItems.remove(position);
+                                ShoppingListEntity shoppingListEntity = EndpointController.getInstance().getShoppingListsForGroup();
+                                shoppingListEntity.getLists().get(0).getProducts().remove(position);
+                                EndpointController.getInstance().getShoppingListEndpoint().updateDatabase(shoppingListEntity);
                                 notifyItemRemoved(position);
                                 return true;
                             case R.id.slim_create_notification:

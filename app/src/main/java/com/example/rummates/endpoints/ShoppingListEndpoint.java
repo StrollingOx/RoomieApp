@@ -2,6 +2,7 @@ package com.example.rummates.endpoints;
 
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
+import android.os.StrictMode;
 import android.util.Log;
 
 import com.example.rummates.entities.shoppinglistEntity.ShoppingListEntity;
@@ -41,6 +42,8 @@ public class ShoppingListEndpoint {
     }
 
     public void updateDatabase(ShoppingListEntity shoppingListEntity){
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
         DatabaseConnector databaseConnector = new DatabaseConnector();
         databaseConnector.execute(shoppingListEntity);
 
@@ -103,7 +106,6 @@ public class ShoppingListEndpoint {
     @SuppressLint("StaticFieldLeak")
     private class DatabaseConnector extends AsyncTask<ShoppingListEntity, Void, ShoppingListEntity>{
 
-        //String uri = "mongodb+srv://edmin:karolkrawczyk@rumies-df76j.azure.mongodb.net/test?retryWrites=true&w=majority";
         @SuppressLint("AuthLeak") String uri = "mongodb://edmin:karolkrawczyk@rumies-shard-00-00-df76j.azure.mongodb.net:27017,rumies-shard-00-01-df76j.azure.mongodb.net:27017,rumies-shard-00-02-df76j.azure.mongodb.net:27017/test?ssl=true&replicaSet=Rumies-shard-0&authSource=admin&retryWrites=true&w=majority";
         String databaseName = "test";
         String collectionName = "groups";
