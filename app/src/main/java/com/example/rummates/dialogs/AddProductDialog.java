@@ -21,6 +21,11 @@ import java.util.Objects;
 
 public class AddProductDialog extends DialogFragment {
     private EditText etProduct;
+    private String groupID;
+
+    public AddProductDialog(String groupID) {
+        this.groupID = groupID;
+    }
 
     @NonNull
     @Override
@@ -39,10 +44,13 @@ public class AddProductDialog extends DialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         String input = etProduct.getText().toString();
                         if(!input.equals("")){
-                            ShoppingListEntity shoppingListEntity = EndpointController.getInstance().getShoppingListsForGroup();
-                            shoppingListEntity.getLists().get(0).getProducts().add(new Item(input, false));
+                            //Get shoppingListEntity from server
+                            ShoppingListEntity shoppingListEntity = EndpointController.getInstance().getShoppingListsForGroup(groupID);
+                            //Create an item that will be sent to database
+                            Item item = new Item(input, false);
+                            item.setListName(shoppingListEntity.getLists().get(0).getListName());
 
-                            EndpointController.getInstance().getShoppingListEndpoint().updateDatabase(shoppingListEntity);
+                            EndpointController.getInstance().patchShoppingListItem(groupID,item);
                         }
                     }});
 

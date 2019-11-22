@@ -5,6 +5,9 @@ import android.util.Log;
 
 import com.example.rummates.endpoints.PostsEndpoint;
 import com.example.rummates.endpoints.ShoppingListEndpoint;
+import com.example.rummates.entities.shoppinglistEntity.CommentForItem;
+import com.example.rummates.entities.shoppinglistEntity.DeleteItem;
+import com.example.rummates.entities.shoppinglistEntity.Item;
 import com.example.rummates.entities.shoppinglistEntity.ShoppingListEntity;
 import com.example.rummates.entities.testEntity.PostEntity;
 import com.example.rummates.entities.testEntity.Post;
@@ -68,17 +71,47 @@ public class EndpointController {
     }
 
     //TODO: this method should get String variable of a group ID to identify which shopping lists to return
-    public ShoppingListEntity getShoppingListsForGroup(/*String id */){
+    public ShoppingListEntity getShoppingListsForGroup(String groupID){
         ShoppingListEntity shoppingListEntity = null;
 
         try{
-            shoppingListEntity = ShoppingListSerializer.shoppingListEntityDeserializer(shoppingListEndpoint.getShoppingListsFromGroup());
+            shoppingListEntity = ShoppingListSerializer.shoppingListEntityDeserializer(shoppingListEndpoint.getShoppingLists(groupID));
             Log.d("Info", "Loading data from rumies.herokuapp.com/groups/shopping/5dc6ba9c2585a92b30b3fb81.");
             return shoppingListEntity;
 
         }catch(Exception e){
             Log.d("Info", "Failed to download data(rumies.herokuapp.com/groups/shopping/5dc6ba9c2585a92b30b3fb81).");
             return new ShoppingListEntity();
+        }
+    }
+
+    public void patchShoppingListItem(String groupID, Item item){
+        try{
+            String JSONitem = ShoppingListSerializer.itemSerialiser(item);
+            Log.d("Info", "Item has been serialized");
+            shoppingListEndpoint.patchShoppingListItem(groupID, JSONitem);
+        }catch(Exception e){
+            Log.d("Info", "Failed to patch the item");
+        }
+    }
+
+    public void patchShoppingListItemComments(String groupID, CommentForItem item){
+        try{
+            String JSONitem = ShoppingListSerializer.commentForItemSerializer(item);
+            Log.d("Info", "CommentForItem has been serialized");
+            shoppingListEndpoint.patchShoppingListComment(groupID, JSONitem);
+        }catch(Exception e){
+            Log.d("Info", "Failed to patch the comment");
+        }
+    }
+
+    public void deleteShoppingListItem(String groupID, DeleteItem item){
+        try{
+            String JSONitem = ShoppingListSerializer.deleteItemSerializer(item);
+            Log.d("Info", "Item has been serialized");
+            shoppingListEndpoint.deleteShoppingListItem(groupID, JSONitem);
+        }catch(Exception e){
+            Log.d("Info", "Failed to delete the item");
         }
     }
 

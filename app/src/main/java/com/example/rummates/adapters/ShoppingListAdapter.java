@@ -18,6 +18,7 @@ import com.example.rummates.R;
 import com.example.rummates.adapters.expandableadapter.CommentAdapter;
 import com.example.rummates.adapters.expandableadapter.CommentGroupModel;
 import com.example.rummates.controllers.EndpointController;
+import com.example.rummates.entities.shoppinglistEntity.DeleteItem;
 import com.example.rummates.entities.shoppinglistEntity.Item;
 import com.example.rummates.dialogs.AddCommentDialog;
 import com.example.rummates.entities.shoppinglistEntity.ShoppingListEntity;
@@ -28,13 +29,16 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
 
     private final String TAG = "ShoppingListAdapter";
 
+    String groupID;
+
     private ArrayList<Item> arrayItems;
     private OnItemClickListener sliListener;
     private Context mContext;
 
-    public ShoppingListAdapter(ArrayList<Item> shoppingList, Context context) {
+    public ShoppingListAdapter(ArrayList<Item> shoppingList, Context context, String groupID) {
         this.arrayItems = shoppingList;
         this.mContext = context;
+        this.groupID = groupID;
     }
 
     public interface OnItemClickListener {
@@ -114,9 +118,10 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
                                 return true;
                             case R.id.slim_delete:
                                 arrayItems.remove(position);
-                                ShoppingListEntity shoppingListEntity = EndpointController.getInstance().getShoppingListsForGroup();
-                                shoppingListEntity.getLists().get(0).getProducts().remove(position);
-                                EndpointController.getInstance().getShoppingListEndpoint().updateDatabase(shoppingListEntity);
+                                ShoppingListEntity shoppingListEntity = EndpointController.getInstance().getShoppingListsForGroup(groupID);
+                                DeleteItem delItem = new DeleteItem(shoppingListEntity.getLists().get(0).getProducts().get(position).getItemName());
+                                delItem.setListName(shoppingListEntity.getLists().get(0).getListName());
+                                EndpointController.getInstance().deleteShoppingListItem(groupID, delItem);
                                 notifyItemRemoved(position);
                                 return true;
                             case R.id.slim_create_notification:
@@ -149,7 +154,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
     }
 
     private void openAddCommentDialog(int position){
-        AddCommentDialog addCommentDialog = new AddCommentDialog(position);
+        AddCommentDialog addCommentDialog = new AddCommentDialog(position, groupID);
         addCommentDialog.show(((MainActivity)mContext).getSupportFragmentManager(), "dialog");
     }
 }
