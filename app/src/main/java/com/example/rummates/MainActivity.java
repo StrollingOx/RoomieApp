@@ -1,16 +1,16 @@
 package com.example.rummates;
 
-import android.os.Bundle;
-import android.view.MenuItem;
+        import android.os.Bundle;
+        import android.view.MenuItem;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
+        import androidx.annotation.NonNull;
+        import androidx.appcompat.app.AppCompatActivity;
+        import androidx.fragment.app.Fragment;
 
-import com.example.rummates.fragments.notes.NotesFragment;
-import com.example.rummates.fragments.ShoppingListFragment;
-import com.example.rummates.fragments.ProfileFragment;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+        import com.example.rummates.fragments.notes.NotesFragment;
+        import com.example.rummates.fragments.ShoppingListFragment;
+        import com.example.rummates.fragments.ProfileFragment;
+        import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 

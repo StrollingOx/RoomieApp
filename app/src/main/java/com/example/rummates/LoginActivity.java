@@ -142,16 +142,18 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d("FBFBFBFBFBF", "UDALO SIE PANIE " + first_name);
 
 
-                        int randomValue = new Random().nextInt(998) + 1;
-                        String fbNick = first_name + "." + last_name + String.valueOf(randomValue);
+
+                        String fbNick = first_name + "." + last_name;
                         SignIn signIn = new SignIn(fbNick, fbNick);
                         String status = signIn.handleSignIn(fbNick, fbNick);
                         Toast.makeText(getBaseContext(), status, Toast.LENGTH_LONG).show();
                         if (Integer.parseInt(status) == 201) {
+                            Log.d("logowanie", "UDALO SIE PANIE " + first_name);
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         } else {
                             RegisterActivity rg = new RegisterActivity();
                             rg.sendPost(first_name, last_name, fbNick, email, fbNick, fbNick, getBaseContext());
+                            Log.d("rejestracja kurła", "UDALO SIE PANIE " + first_name);
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
 
                         }
