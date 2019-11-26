@@ -95,8 +95,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 SignIn signIn = new SignIn(nick, password);
                 String status = signIn.handleSignIn(nick,password);
-                Toast.makeText(getBaseContext(), status, Toast.LENGTH_LONG).show();
-                if(Integer.parseInt(status) == 201){
+                Toast.makeText(getBaseContext(), "Logged in succesfully", Toast.LENGTH_LONG).show();
+                if(status.contains("_id")){
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 }
             }
@@ -141,13 +141,11 @@ public class LoginActivity extends AppCompatActivity {
                     if (id.length() > 0) {
                         Log.d("FBFBFBFBFBF", "UDALO SIE PANIE " + first_name);
 
-
-                        int randomValue = new Random().nextInt(998) + 1;
-                        String fbNick = first_name + "." + last_name + String.valueOf(randomValue);
+                        String fbNick = first_name + "." + last_name;
                         SignIn signIn = new SignIn(fbNick, fbNick);
                         String status = signIn.handleSignIn(fbNick, fbNick);
-                        Toast.makeText(getBaseContext(), status, Toast.LENGTH_LONG).show();
-                        if (Integer.parseInt(status) == 201) {
+                        Toast.makeText(getBaseContext(), "Logged in via facebook", Toast.LENGTH_LONG).show();
+                        if (status.contains("_id")) {
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         } else {
                             RegisterActivity rg = new RegisterActivity();
@@ -160,7 +158,6 @@ public class LoginActivity extends AppCompatActivity {
                     requestOptions.dontAnimate();
 
                     //Glide.with(LoginActivity.this).load(image_url).into(circleImageView);
-
 
                 } catch (JSONException e) {
                     e.printStackTrace();
