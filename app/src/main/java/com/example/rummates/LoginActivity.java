@@ -146,10 +146,12 @@ public class LoginActivity extends AppCompatActivity {
                         String status = signIn.handleSignIn(fbNick, fbNick);
                         Toast.makeText(getBaseContext(), "Logged in via facebook", Toast.LENGTH_LONG).show();
                         if (status.contains("_id")) {
+
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         } else {
                             RegisterActivity rg = new RegisterActivity();
                             rg.sendPost(first_name, last_name, fbNick, email, fbNick, fbNick, getBaseContext());
+                            Log.d("rejestracja kurła", "UDALO SIE PANIE " + first_name);
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
 
                         }
