@@ -12,6 +12,7 @@ package com.example.rummates;
         import com.example.rummates.fragments.ProfileFragment;
         import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
 
                 case R.id.bottom_nav_notes:
-                    selectedFragment = new NotesFragment();
+                    selectedFragment = new NoteFragment();
                     break;
 
                 case R.id.bottom_nav_profile:
