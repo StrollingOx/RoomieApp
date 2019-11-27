@@ -29,6 +29,9 @@ public class ShoppingListFragment extends Fragment {
 
     private final String TAG = "ShoppingListFragment";
 
+    //TODO: Pass GROUP_ID parameter
+    private String groupID = "5dc6ba9c2585a92b30b3fb81";
+
     private ArrayList<Item> shoppingList;
     private RecyclerView shoppingListRV;
     private RecyclerView.LayoutManager layoutManager;
@@ -44,7 +47,8 @@ public class ShoppingListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_shoppinglist, container, false);
 
-        updateShoppingList();
+
+        updateShoppingList(groupID);
         initRecyclerView(view);
         initTestButton(view);
 
@@ -56,7 +60,7 @@ public class ShoppingListFragment extends Fragment {
         addButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                AddProductDialog addProductDialog = new AddProductDialog();
+                AddProductDialog addProductDialog = new AddProductDialog(groupID);
                 addProductDialog.show((getActivity()).getSupportFragmentManager(), "dialog");
             }
         });
@@ -66,8 +70,8 @@ public class ShoppingListFragment extends Fragment {
 
     //TODO: Refresh adapter periodically
 
-    private void updateShoppingList() {
-        shoppingListEntity = EndpointController.getInstance(getContext()).getShoppingListsForGroup();
+    private void updateShoppingList(String groupID) {
+        shoppingListEntity = EndpointController.getInstance(getContext()).getShoppingListsForGroup(groupID);
         if(shoppingList != shoppingListEntity.getLists().get(0).getProducts())
             shoppingList = shoppingListEntity.getLists().get(0).getProducts();
 
@@ -77,7 +81,7 @@ public class ShoppingListFragment extends Fragment {
     private void initRecyclerView(View view){
         shoppingListRV = view.findViewById(R.id.sl_recyclerview);
         layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL,false);
-        shoppingListAdapter = new ShoppingListAdapter(shoppingList, getContext());
+        shoppingListAdapter = new ShoppingListAdapter(shoppingList, getContext(), groupID);
         shoppingListRV.setLayoutManager(layoutManager);
         shoppingListRV.setAdapter(shoppingListAdapter);
 
