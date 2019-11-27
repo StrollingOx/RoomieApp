@@ -86,13 +86,6 @@ public class ShoppingListEndpoint {
         return response;
     }
 
-    public String updateDatabase(ShoppingListEntity shoppingListEntity){
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        DatabaseConnector databaseConnector = new DatabaseConnector();
-        databaseConnector.execute(shoppingListEntity);
-        return "done";
-    }
 
     @SuppressLint("StaticFieldLeak")
     private class NetworkConnector extends AsyncTask<Object, Void, String> {
@@ -164,52 +157,6 @@ public class ShoppingListEndpoint {
         }
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private class DatabaseConnector extends AsyncTask<ShoppingListEntity, Void, ShoppingListEntity>{
-
-        @SuppressLint("AuthLeak") String uri = "mongodb://edmin:karolkrawczyk@rumies-shard-00-00-df76j.azure.mongodb.net:27017,rumies-shard-00-01-df76j.azure.mongodb.net:27017,rumies-shard-00-02-df76j.azure.mongodb.net:27017/test?ssl=true&replicaSet=Rumies-shard-0&authSource=admin&retryWrites=true&w=majority";
-        String databaseName = "test";
-        String collectionName = "groups";
-
-        MongoClientURI clientURI;
-        MongoClient mongoClient;
-        MongoDatabase mongoDatabase;
-        MongoCollection collection;
-
-        Document search = new Document("group_name", "Roomies Dev");
-        Document found;
-
-        @Override
-        protected ShoppingListEntity doInBackground(ShoppingListEntity... shoppingListEntities) {
-
-            try {
-                clientURI = new MongoClientURI(uri);
-                mongoClient = new MongoClient(clientURI);
-                mongoDatabase = mongoClient.getDatabase(databaseName);
-                collection = mongoDatabase.getCollection(collectionName);
-                found = (Document) collection.find(search).first();
-            }catch(Exception e)
-            {
-                System.out.println("connection-exception");
-                return null;
-            }
-            return shoppingListEntities[0];
-        }
-
-        @Override
-        protected void onPostExecute(ShoppingListEntity shoppingListEntity) {
-            if(shoppingListEntity!=null) {
-                Bson updatedDocument = Document.parse(ShoppingListSerializer.shoppingListEntitySerializer(shoppingListEntity));
-                Bson updateOperation = new Document("$set", updatedDocument);
-                collection.updateOne(found, updateOperation);
-                Log.d(TAG, "Database successfully updated");
-            }else{
-                Log.d(TAG, "Failed to update document on database");
-            }
-        }
-
-    }
-
     private String selector(Integer id)
     {
         switch(id){
@@ -222,30 +169,3 @@ public class ShoppingListEndpoint {
         }
     }
 }
-
-/*
-
-        String uri = "mongodb://edmin:karolkrawczyk@rumies-shard-00-00-df76j.azure.mongodb.net:27017,rumies-shard-00-01-df76j.azure.mongodb.net:27017,rumies-shard-00-02-df76j.azure.mongodb.net:27017/test?ssl=true&replicaSet=Rumies-shard-0&authSource=admin&retryWrites=true&w=majority";
-        MongoClientURI clientURI = new MongoClientURI(uri);
-        MongoClient mongoClient = new MongoClient(clientURI);
-
-        MongoDatabase mongoDatabase = mongoClient.getDatabase("test");
-        MongoCollection collection = mongoDatabase.getCollection("groups");
-
-        System.out.println("Database Connected");
-
-        Document search = (Document) collection.find(new Document("group_name", "Roomies Dev")).first();
-        System.out.println(search);
-
-        //from Document to json string
-        String json = search.toJson();
-        System.out.println(json);
-
-        //from json string to Document
-        Document doc = Document.parse(json);
-        System.out.println(doc);
-
-        //equals?
-        System.out.println(search.toString().equals(doc.toString()));
-
- */

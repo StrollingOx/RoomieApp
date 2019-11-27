@@ -7,7 +7,7 @@ package com.example.rummates;
         import androidx.appcompat.app.AppCompatActivity;
         import androidx.fragment.app.Fragment;
 
-        import com.example.rummates.fragments.NotesFragment;
+        import com.example.rummates.fragments.NoteFragment;
         import com.example.rummates.fragments.ShoppingListFragment;
         import com.example.rummates.fragments.ProfileFragment;
         import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -52,4 +52,8 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    @Override
+    public void onBackPressed() {
+
+    }
 }

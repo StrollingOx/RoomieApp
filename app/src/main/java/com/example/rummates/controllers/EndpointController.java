@@ -113,12 +113,14 @@ public class EndpointController {
             String JSONitem = ShoppingListSerializer.deleteItemSerializer(item);
             Log.d("Info", "Item has been serialized");
             shoppingListEndpoint.deleteShoppingListItem(groupID, JSONitem);
-        }catch(Exception e){
+        }catch(Exception e) {
             Log.d("Info", "Failed to delete the item");
+        }
+    }
 
     public NotesEntity getNotesForGroup(/*String id */){
         NotesEntity notesEntity = null;
-
+        
         try{
             notesEntity = NotesSerializer.notesEntityDeserializer(notesEndpoint.getAllPosts());
             Log.d("Info", "Loading data from rumies.herokuapp.com/groups/notes/5dc6ba9c2585a92b30b3fb81.");
@@ -126,7 +128,7 @@ public class EndpointController {
 
         }catch(Exception e){
             Log.d("Info", "Failed to download data(rumies.herokuapp.com/groups/notes/5dc6ba9c2585a92b30b3fb81).");
-            return new NotesEntity();>>>>>>> master
+            return new NotesEntity();
         }
     }
 
