@@ -120,7 +120,7 @@ public class EndpointController {
 
     public NotesEntity getNotesForGroup(/*String id */){
         NotesEntity notesEntity = null;
-        
+
         try{
             notesEntity = NotesSerializer.notesEntityDeserializer(notesEndpoint.getAllPosts());
             Log.d("Info", "Loading data from rumies.herokuapp.com/groups/notes/5dc6ba9c2585a92b30b3fb81.");
