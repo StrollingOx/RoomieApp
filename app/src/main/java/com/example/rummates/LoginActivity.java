@@ -2,6 +2,7 @@ package com.example.rummates;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,6 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
+import java.util.Random;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -93,8 +95,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 SignIn signIn = new SignIn(nick, password);
                 String status = signIn.handleSignIn(nick,password);
-                Toast.makeText(getBaseContext(), status, Toast.LENGTH_LONG).show();
-                if(Integer.parseInt(status) == 201){
+                Toast.makeText(getBaseContext(), "Logged in succesfully", Toast.LENGTH_LONG).show();
+                if(status.contains("_id")){
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 }
             }
@@ -135,11 +137,29 @@ public class LoginActivity extends AppCompatActivity {
                     String id = object.getString("id");
                     String image_url = "https://graph.facebook.com/"+id+ "/picture?type=normal";
 
+                    Log.d("fbfbfb","here are some info: "+first_name);
+                    if (id.length() > 0) {
+                        Log.d("FBFBFBFBFBF", "UDALO SIE PANIE " + first_name);
+
+                        String fbNick = first_name + "." + last_name;
+                        SignIn signIn = new SignIn(fbNick, fbNick);
+                        String status = signIn.handleSignIn(fbNick, fbNick);
+                        Toast.makeText(getBaseContext(), "Logged in via facebook", Toast.LENGTH_LONG).show();
+                        if (status.contains("_id")) {
+
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        } else {
+                            RegisterActivity rg = new RegisterActivity();
+                            rg.sendPost(first_name, last_name, fbNick, email, fbNick, fbNick, getBaseContext());
+                            Log.d("rejestracja kurła", "UDALO SIE PANIE " + first_name);
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+
+                        }
+                    }
                     RequestOptions requestOptions = new RequestOptions();
                     requestOptions.dontAnimate();
 
                     //Glide.with(LoginActivity.this).load(image_url).into(circleImageView);
-
 
                 } catch (JSONException e) {
                     e.printStackTrace();

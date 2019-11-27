@@ -3,14 +3,16 @@ package com.example.rummates.controllers;
 import android.content.Context;
 import android.util.Log;
 
-import com.example.rummates.endpoints.PostsEndpoint;
+import com.example.rummates.endpoints.NotesEndpoint;
 import com.example.rummates.endpoints.ShoppingListEndpoint;
 import com.example.rummates.entities.shoppinglistEntity.CommentForItem;
 import com.example.rummates.entities.shoppinglistEntity.DeleteItem;
 import com.example.rummates.entities.shoppinglistEntity.Item;
+import com.example.rummates.entities.notesEntity.NotesEntity;
 import com.example.rummates.entities.shoppinglistEntity.ShoppingListEntity;
 import com.example.rummates.entities.testEntity.PostEntity;
 import com.example.rummates.entities.testEntity.Post;
+import com.example.rummates.serializer.NotesSerializer;
 import com.example.rummates.serializer.PostSerializer;
 import com.example.rummates.serializer.ShoppingListSerializer;
 
@@ -20,13 +22,13 @@ import java.util.List;
 public class EndpointController {
 
     private static EndpointController instance;
-    private PostsEndpoint postsEndpoint;
+    private NotesEndpoint notesEndpoint;
     private ShoppingListEndpoint shoppingListEndpoint; //TODO: Might need to merge with Posts/NotesEndpoint
     private Context context;
 
     private EndpointController(Context context){
         this.context=context;
-        this.postsEndpoint = new PostsEndpoint();
+        this.notesEndpoint = new NotesEndpoint();
         this.shoppingListEndpoint = new ShoppingListEndpoint();
     }
 
@@ -44,7 +46,7 @@ public class EndpointController {
         Post Post = null;
 
         try{
-            Post = PostSerializer.allPostsDeserializer(postsEndpoint.getAllPosts());
+            Post = PostSerializer.allPostsDeserializer(notesEndpoint.getAllPosts());
             Log.d("Info", "Loading data from rumies.herokuapp.com/posts.");
             return Post;
         }catch(Exception e){
@@ -60,7 +62,7 @@ public class EndpointController {
         PostEntity postEntity = null;
 
         try{
-            postEntity = PostSerializer.singlePostDeserializer(postsEndpoint.getFirstPost());
+            postEntity = PostSerializer.singlePostDeserializer(notesEndpoint.getFirstPost());
             Log.d("Info", "Loading data from rumies.herokuapp.com/posts/5da8e600b5d6e426d4d6ef0b.");
             return postEntity;
         }catch(Exception e){
@@ -84,6 +86,7 @@ public class EndpointController {
             return new ShoppingListEntity();
         }
     }
+
 
     public void patchShoppingListItem(String groupID, Item item){
         try{
@@ -112,10 +115,26 @@ public class EndpointController {
             shoppingListEndpoint.deleteShoppingListItem(groupID, JSONitem);
         }catch(Exception e){
             Log.d("Info", "Failed to delete the item");
+
+    public NotesEntity getNotesForGroup(/*String id */){
+        NotesEntity notesEntity = null;
+
+        try{
+            notesEntity = NotesSerializer.notesEntityDeserializer(notesEndpoint.getAllPosts());
+            Log.d("Info", "Loading data from rumies.herokuapp.com/groups/notes/5dc6ba9c2585a92b30b3fb81.");
+            return notesEntity;
+
+        }catch(Exception e){
+            Log.d("Info", "Failed to download data(rumies.herokuapp.com/groups/notes/5dc6ba9c2585a92b30b3fb81).");
+            return new NotesEntity();>>>>>>> master
         }
     }
 
     public ShoppingListEndpoint getShoppingListEndpoint() {
         return shoppingListEndpoint;
+    }
+
+    public NotesEndpoint getNotesEndpoint() {
+        return notesEndpoint;
     }
 }
