@@ -1,7 +1,6 @@
 package com.example.rummates.fragments;
 
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,26 +10,26 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.rummates.MainActivity;
+import com.example.rummates.Errors.ErrorTags;
 import com.example.rummates.R;
 import com.example.rummates.adapters.ShoppingListAdapter;
 import com.example.rummates.controllers.EndpointController;
 import com.example.rummates.dialogs.AddProductDialog;
+import com.example.rummates.entities.UserEntity;
 import com.example.rummates.entities.shoppinglistEntity.Item;
 import com.example.rummates.entities.shoppinglistEntity.ShoppingListEntity;
+import com.example.rummates.serializer.UserSerializer;
 
 import java.util.ArrayList;
 
 public class ShoppingListFragment extends Fragment {
 
     private final String TAG = "ShoppingListFragment";
-
-    //TODO: Pass GROUP_ID parameter
-    private String groupID = "5dc6ba9c2585a92b30b3fb81";
+    private String groupID = ErrorTags.ERROR_NO_GROUP_ID;
+    private UserEntity user = null;
 
     private ArrayList<Item> shoppingList;
     private RecyclerView shoppingListRV;
@@ -48,11 +47,29 @@ public class ShoppingListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_shoppinglist, container, false);
 
 
+        getExtras();
+        getFirstGroupId();
         updateShoppingList(groupID);
         initRecyclerView(view);
         initTestButton(view);
 
         return view;
+    }
+
+    private void getExtras() {
+        Bundle b = getActivity().getIntent().getExtras();
+        if(b != null){
+            user = UserSerializer.userDeserializer(getActivity().getIntent().getExtras().getString("user"));
+        }
+    }
+
+    private void getFirstGroupId() {
+        if(user != null)
+            if(user.getGroups().size() != 0)
+                this.groupID = user.getGroups().get(0).getId();
+        else
+            groupID = "5dc6ba9c2585a92b30b3fb81";
+        //TODO: if no groups -> go to CreateGroup
     }
 
     private void initTestButton(View view) {

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:tag="shoppinglist_tag"
+    >
+
+    <EditText
+        android:id="@+id/group_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginTop="50dp"
+        android:hint="Group name"
+        android:inputType="textPersonName"
+        />
+
+    <SearchView
+        android:layout_marginTop="120dp"
+        android:hint="Add users"
+        android:id="@+id/userSearcher"
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="200dp"
+        android:id="@+id/createGroup"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        />
+
+</RelativeLayout>
