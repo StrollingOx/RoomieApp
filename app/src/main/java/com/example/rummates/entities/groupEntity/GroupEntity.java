@@ -14,7 +14,6 @@ public class GroupEntity {
     @SerializedName("id")
     @Expose
     private String id;
-
     @SerializedName("user_ids")
     @Expose
     private List<String> user_ids = null;
@@ -37,6 +36,7 @@ public class GroupEntity {
 
     public void setId(String id) {
         this.id = id;
+
     }
 
     public List<String> getUser_ids() {

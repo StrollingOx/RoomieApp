@@ -15,4 +15,6 @@ public class GroupSerializer {
         return gson.toJson(groupEntity);
     }
 
+
 }
+
