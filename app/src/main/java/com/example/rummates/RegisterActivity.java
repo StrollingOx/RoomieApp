@@ -145,7 +145,6 @@ public class RegisterActivity extends AppCompatActivity {
                     jsonParam.put("nick", nick);
                     jsonParam.put("email", email);
                     jsonParam.put("password", password);
-                    jsonParam.put("phone_number", "90011");
 
                     Log.i("JSON", jsonParam.toString());
                     DataOutputStream os = new DataOutputStream(conn.getOutputStream());

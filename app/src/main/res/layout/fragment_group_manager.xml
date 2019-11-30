@@ -14,8 +14,8 @@
         android:layout_height="70dp" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/groups_rv"
         android:layout_marginTop="100dp"
-        android:id="@+id/groupManager"
         android:layout_width="match_parent"
         android:layout_height="500dp"
         />
