@@ -1,10 +1,7 @@
 package com.example.rummates.entities.notesEntity;
 
-import com.example.rummates.entities.shoppinglistEntity.Item;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
-import java.util.ArrayList;
 
 public class Note {
 
