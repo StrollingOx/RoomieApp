@@ -13,11 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.rummates.R;
-import com.example.rummates.adapters.expandableadapter.CommentAdapter;
-import com.example.rummates.adapters.expandableadapter.CommentGroupModel;
 import com.example.rummates.controllers.EndpointController;
 import com.example.rummates.entities.notesEntity.Note;
-import com.example.rummates.entities.notesEntity.NotesEntity;
 
 import java.util.ArrayList;
 
@@ -25,11 +22,13 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder>{
 
     private ArrayList<Note> arrayNotes;
     private OnItemClickListener notesItemListener;
+    private String groupID;
     private Context mContext;
 
-    public NotesAdapter(ArrayList<Note> notes, Context context) {
+    public NotesAdapter(ArrayList<Note> notes, Context context, String groupID) {
         this.arrayNotes = notes;
         this.mContext = context;
+        this.groupID = groupID;
     }
 
     public interface OnItemClickListener {
@@ -88,7 +87,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder>{
         final Note currentNote = arrayNotes.get(position);
 
         if(currentNote != null) {
-            holder.noteContent.setText(currentNote.getNoteContent());
+            holder.noteContent.setText(currentNote.getContent());
         }
 
         holder.noteMenu.setOnClickListener(new View.OnClickListener(){
@@ -101,10 +100,11 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder>{
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.note_delete:
+                                Note note = new Note(arrayNotes.get(position).getContent());
+                                System.out.println(note.getContent());
                                 arrayNotes.remove(position);
-                                NotesEntity notesEntity = EndpointController.getInstance().getNotesForGroup();
-                                notesEntity.getNotes().remove(position);
-                                EndpointController.getInstance().getNotesEndpoint().updateDatabase(notesEntity);
+                                EndpointController.getInstance().deleteNoteForGroup(groupID, note);
+
                                 notifyItemRemoved(position);
                                 return true;
                             default:
