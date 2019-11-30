@@ -20,14 +20,37 @@ public class Note {
     @Expose
     private String content;
 
-
+    //GET
     public Note(String content, String author, String date) {
         this.date = date;
         this.content = content;
         this.author = author;
     }
 
-    public String getNoteContent(){ return content;}
+    //PATCH
+    //{ "notes": {"author": "Adam", "content": "test test teset"} }
+    public Note(String content, String author) {
+        this.content = content;
+        this.author = author;
+    }
+
+    //DELETE
+    //{ "content": "test test teset"}
+    public Note(String content) {
+        this.content = content;
+    }
+
+
+    public String getDate() {
+        return date;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+
+    public String getContent(){ return content;}
 
 
 }

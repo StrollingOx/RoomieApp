@@ -2,38 +2,30 @@ package com.example.rummates.endpoints;
 
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
-import android.os.StrictMode;
 import android.util.Log;
 
-import com.example.rummates.entities.notesEntity.NotesEntity;
-import com.example.rummates.entities.shoppinglistEntity.ShoppingListEntity;
-import com.example.rummates.serializer.NotesSerializer;
-import com.example.rummates.serializer.ShoppingListSerializer;
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-
-import org.bson.Document;
-import org.bson.conversions.Bson;
+import com.mongodb.util.JSON;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.concurrent.ExecutionException;
 
 public class NotesEndpoint {
-    //TODO:RENAME!!! (this is notes endpoint now)
+
     private static final String USER_AGENT = "Mozilla/5.0";
     private static final String SERVER_URL = "https://rumies.herokuapp.com";
-    private static final String SERVER_POSTS = "https://rumies.herokuapp.com/groups/notes";
+    private static final String SERVER_NOTES_GET = "https://rumies.herokuapp.com/groups/notes/";
+    private static final String SERVER_NOTE_DELETE = "https://rumies.herokuapp.com/groups/notes/";
+    private static final String SERVER_NOTE_PATCH = "https://rumies.herokuapp.com/groups/notes/";
 
-    public String getAllPosts(){
+    public String getNotes(String groupID){
         NetworkConnector networkConnector = new NetworkConnector();
         String response;
         try {
-            response = networkConnector.execute(0).get();
+            response = networkConnector.execute(0, groupID).get();
         } catch (ExecutionException e) {
             response = "EXECUTION_EXCEPTION";
         } catch (InterruptedException e) {
@@ -42,19 +34,12 @@ public class NotesEndpoint {
         return response;
     }
 
-    public String updateDatabase(NotesEntity notesEntity){
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        DatabaseConnector databaseConnector = new DatabaseConnector();
-        databaseConnector.execute(notesEntity);
-        return "done";
-    }
-
-    public String getFirstPost(){
+    public String patchNote(String groupID, String JSONnote){
+        System.out.println(JSONnote);
         NetworkConnector networkConnector = new NetworkConnector();
         String response;
         try {
-            response = networkConnector.execute(1).get();
+            response = networkConnector.execute(1, groupID, JSONnote).get();
         } catch (ExecutionException e) {
             response = "EXECUTION_EXCEPTION";
         } catch (InterruptedException e) {
@@ -63,6 +48,19 @@ public class NotesEndpoint {
         return response;
     }
 
+    public String deleteNote(String groupID, String JSONnote){
+        System.out.println(JSONnote);
+        NetworkConnector networkConnector = new NetworkConnector();
+        String response;
+        try {
+            response = networkConnector.execute(2, groupID, JSONnote).get();
+        } catch (ExecutionException e) {
+            response = "EXECUTION_EXCEPTION";
+        } catch (InterruptedException e) {
+            response = "INTERRUPTED_EXCEPTION";
+        }
+        return response;
+    }
 
     @SuppressLint("StaticFieldLeak")
     private class NetworkConnector extends AsyncTask<Object, Void, String> {
@@ -71,17 +69,45 @@ public class NotesEndpoint {
         protected String doInBackground(Object... objects) {
             StringBuilder response = new StringBuilder();
             HttpURLConnection con = null;
+            DataOutputStream os = null;
             int responseCode = 0;
             try {
-                URL obj = new URL(selector((Integer)objects[0]));
+                URL obj = new URL(selector((Integer)objects[0]) + objects[1]);
                 con = (HttpURLConnection) obj.openConnection();
-                con.setRequestMethod("GET");
-                con.setRequestProperty("User-Agent", USER_AGENT);
+                switch((Integer)objects[0]){
+                    case 1:
+                        con.setRequestMethod("PATCH");
+                        con.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+                        con.setRequestProperty("Accept", "application/json");
+                        con.setDoOutput(true);
+                        con.setDoInput(true);
+                        os = new DataOutputStream(con.getOutputStream());
+                        os.writeBytes((String)objects[2]);
+
+                        os.flush();
+                        os.close();
+                        break;
+                    case 2:
+                        con.setRequestMethod("DELETE");
+                        con.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+                        con.setRequestProperty("Accept", "application/json");
+                        con.setDoOutput(true);
+                        con.setDoInput(true);
+                        os = new DataOutputStream(con.getOutputStream());
+                        os.writeBytes((String)objects[2]);
+
+                        os.flush();
+                        os.close();
+                        break;
+                    default: //case 0:
+                        //ERR
+                        con.setRequestMethod("GET");
+                        con.setRequestProperty("User-Agent", USER_AGENT);
+                }
                 responseCode = con.getResponseCode();
             } catch (Exception e) {
                 return "connection-exception";
             }
-
             if (responseCode == 404) {
                 return "not-found-exception";
             }
@@ -104,54 +130,12 @@ public class NotesEndpoint {
         }
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private class DatabaseConnector extends AsyncTask<NotesEntity, Void, NotesEntity>{
-
-        @SuppressLint("AuthLeak") String uri = "mongodb://edmin:karolkrawczyk@rumies-shard-00-00-df76j.azure.mongodb.net:27017,rumies-shard-00-01-df76j.azure.mongodb.net:27017,rumies-shard-00-02-df76j.azure.mongodb.net:27017/test?ssl=true&replicaSet=Rumies-shard-0&authSource=admin&retryWrites=true&w=majority";
-        String databaseName = "test";
-        String collectionName = "groups";
-
-        MongoClientURI clientURI;
-        MongoClient mongoClient;
-        MongoDatabase mongoDatabase;
-        MongoCollection collection;
-
-        Document search = new Document("group_name", "Roomies Dev");
-        Document found;
-
-        @Override
-        protected NotesEntity doInBackground(NotesEntity... notesEntities) {
-
-            try {
-                clientURI = new MongoClientURI(uri);
-                mongoClient = new MongoClient(clientURI);
-                mongoDatabase = mongoClient.getDatabase(databaseName);
-                collection = mongoDatabase.getCollection(collectionName);
-                found = (Document) collection.find(search).first();
-            }catch(Exception e)
-            {
-                System.out.println("connection-exception");
-                return null;
-            }
-            return notesEntities[0];
-        }
-
-        @Override
-        protected void onPostExecute(NotesEntity notesEntity) {
-            if(notesEntity!=null) {
-                Bson updatedDocument = Document.parse(NotesSerializer.notesEntitySerializer(notesEntity));
-                Bson updateOperation = new Document("$set", updatedDocument);
-                collection.updateOne(found, updateOperation);
-            }else{
-            }
-        }
-
-    }
-
     private String selector(Integer id)
     {
         switch(id){
-            case 0: return SERVER_POSTS + "/5dc6ba9c2585a92b30b3fb81";
+            case 0: return SERVER_NOTES_GET;
+            case 1: return SERVER_NOTE_PATCH;
+            case 2: return SERVER_NOTE_DELETE;
             default:
                 return SERVER_URL;
         }

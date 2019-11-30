@@ -32,7 +32,7 @@ import java.util.Random;
 public class LoginActivity extends AppCompatActivity {
 
     private LoginButton loginButton;
-    private Button magicButton, registerButton, signInButton;
+    private Button registerButton, signInButton;
     String nick,password;
 
     private CallbackManager callbackManager;
@@ -43,7 +43,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         loginButton = findViewById(R.id.login_button);
-        magicButton = findViewById(R.id.magic_button);
 
         registerButton = findViewById(R.id.register_button);
         signInButton = findViewById(R.id.sign_in_button);
@@ -56,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                magicButton.setEnabled(true);
+
             }
 
             @Override
@@ -69,12 +68,6 @@ public class LoginActivity extends AppCompatActivity {
 
             }
 
-        });
-        magicButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, NotesActivity.class));
-            }
         });
 
         registerButton.setOnClickListener(new View.OnClickListener() {
