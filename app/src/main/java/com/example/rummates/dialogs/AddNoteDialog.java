@@ -24,6 +24,11 @@ import java.util.Objects;
 
 public class AddNoteDialog extends DialogFragment {
     private EditText note;
+    private String groupID;
+
+    public AddNoteDialog(String groupID) {
+        this.groupID = groupID;
+    }
 
     @NonNull
     @Override
@@ -42,10 +47,8 @@ public class AddNoteDialog extends DialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         String input = note.getText().toString();
                         if(!input.equals("")){
-                            NotesEntity notesEntity = EndpointController.getInstance().getNotesForGroup();
-                            notesEntity.getNotes().add(new Note(input, "anncisz", Calendar.getInstance().getTime().toString()));
-
-                            EndpointController.getInstance().getNotesEndpoint().updateDatabase(notesEntity);
+                            Note note = new Note(input, "Anncisz");
+                            EndpointController.getInstance().patchNoteForGroup(groupID, note);
                         }
                     }});
 

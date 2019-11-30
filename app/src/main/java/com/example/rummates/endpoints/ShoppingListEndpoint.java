@@ -86,14 +86,6 @@ public class ShoppingListEndpoint {
         return response;
     }
 
-    public String updateDatabase(ShoppingListEntity shoppingListEntity){
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        DatabaseConnector databaseConnector = new DatabaseConnector();
-        databaseConnector.execute(shoppingListEntity);
-        return "done";
-    }
-
     @SuppressLint("StaticFieldLeak")
     private class NetworkConnector extends AsyncTask<Object, Void, String> {
 
@@ -132,16 +124,14 @@ public class ShoppingListEndpoint {
                         os.flush();
                         os.close();
                         break;
-                    default:
+                    default: //case 0:
                         con.setRequestMethod("GET");
                         con.setRequestProperty("User-Agent", USER_AGENT);
-
                 }
                 responseCode = con.getResponseCode();
             } catch (Exception e) {
                 return "connection-exception";
             }
-
             if (responseCode == 404) {
                 return "not-found-exception";
             }

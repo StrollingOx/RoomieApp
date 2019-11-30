@@ -40,21 +40,22 @@ public class NoteFragment extends Fragment {
     private NotesAdapter notesAdapter;
     private NotesEntity noteEntity;
 
+    private String groupID = "5dc6ba9c2585a92b30b3fb81";
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_notes, container, false);
 
-        updateNotes();
+        getNotesForCurrentGroup(groupID);
         initAddButton(view);
         initRecyclerView(view);
 
-        AddNoteDialog d = new AddNoteDialog();
+        AddNoteDialog d = new AddNoteDialog(groupID);
         d.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                updateNotes();
+                getNotesForCurrentGroup(groupID);
             }
         });
 
@@ -66,7 +67,7 @@ public class NoteFragment extends Fragment {
         addButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                AddNoteDialog addNoteDialog = new AddNoteDialog();
+                AddNoteDialog addNoteDialog = new AddNoteDialog(groupID);
                 addNoteDialog.show((getActivity()).getSupportFragmentManager(), "dialog");
             }
         });
@@ -75,18 +76,17 @@ public class NoteFragment extends Fragment {
 
     //TODO: Refresh adapter periodically
 
-    private void updateNotes() {
-        noteEntity = EndpointController.getInstance(getContext()).getNotesForGroup();
+    private void getNotesForCurrentGroup(String groupID) {
+        noteEntity = EndpointController.getInstance(getContext()).getNotesForGroup(groupID);
         if(notes != noteEntity.getNotes())
             notes = noteEntity.getNotes();
-        Log.d("HERE", noteEntity.toString());
         Log.d(TAG, "Notes Updated");
     }
 
     private void initRecyclerView(View view){
         NotesRV = view.findViewById(R.id.notes_recyclerview);
         layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL,false);
-        notesAdapter = new NotesAdapter(notes, getContext());
+        notesAdapter = new NotesAdapter(notes, getContext(), groupID);
         NotesRV.setLayoutManager(layoutManager);
         NotesRV.setAdapter(notesAdapter);
 
