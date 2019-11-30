@@ -7,7 +7,8 @@ package com.example.rummates;
         import androidx.appcompat.app.AppCompatActivity;
         import androidx.fragment.app.Fragment;
 
-        import com.example.rummates.fragments.NotesFragment;
+        import com.example.rummates.fragments.GroupFragment;
+        import com.example.rummates.fragments.NoteFragment;
         import com.example.rummates.fragments.ShoppingListFragment;
         import com.example.rummates.fragments.ProfileFragment;
         import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -46,7 +47,12 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.bottom_nav_profile:
                     selectedFragment = new ProfileFragment();
                     break;
+
+                case R.id.bottom_nav_group:
+                    selectedFragment = new GroupFragment();
+                    break;
             }
+
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,selectedFragment).commit();
             return true;
         }
