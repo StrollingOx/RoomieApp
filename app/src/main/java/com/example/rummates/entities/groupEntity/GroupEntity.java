@@ -11,10 +11,9 @@ public class GroupEntity {
     @Expose
     private String name;
 
-    @SerializedName("_id")
+    @SerializedName("id")
     @Expose
-    private String _id;
-
+    private String id;
     @SerializedName("user_ids")
     @Expose
     private List<String> user_ids = null;
@@ -31,12 +30,13 @@ public class GroupEntity {
         this.name = name;
     }
 
-    public String get_id() {
-        return _id;
+    public String getId() {
+        return id;
     }
 
-    public void set_id(String _id) {
-        this._id = _id;
+    public void setId(String id) {
+        this.id = id;
+
     }
 
     public List<String> getUser_ids() {

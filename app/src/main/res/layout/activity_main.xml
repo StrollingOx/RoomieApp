@@ -21,7 +21,8 @@
         android:layout_alignParentBottom="true"
         app:menu="@menu/bottom_navigation"
         app:itemBackground="@color/colorAccentSecondary"
-        android:background="?android:attr/windowBackground"/>
+        android:background="@color/colorAccentSecondary"/>
+    <!--?android:attr/windowBackground-->
 
 
 </RelativeLayout>

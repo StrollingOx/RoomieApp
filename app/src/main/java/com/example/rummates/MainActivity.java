@@ -1,5 +1,6 @@
 package com.example.rummates;
 
+        import android.content.Intent;
         import android.os.Bundle;
         import android.view.MenuItem;
 
@@ -7,15 +8,19 @@ package com.example.rummates;
         import androidx.appcompat.app.AppCompatActivity;
         import androidx.fragment.app.Fragment;
 
+        import com.example.rummates.entities.UserEntity;
         import com.example.rummates.fragments.GroupFragment;
         import com.example.rummates.fragments.NoteFragment;
         import com.example.rummates.fragments.ShoppingListFragment;
         import com.example.rummates.fragments.ProfileFragment;
+        import com.example.rummates.serializer.UserSerializer;
         import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+        import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity {
-
+    private UserEntity user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

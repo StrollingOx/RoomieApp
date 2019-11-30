@@ -80,20 +80,23 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                EditText nickField = (EditText) findViewById(R.id.sign_in_username);
-                EditText passwordField = (EditText) findViewById(R.id.sign_in_password);
+            EditText nickField = (EditText) findViewById(R.id.sign_in_username);
+            EditText passwordField = (EditText) findViewById(R.id.sign_in_password);
 
-                nick = nickField.getText().toString();
-                password = passwordField.getText().toString();
+            nick = nickField.getText().toString();
+            password = passwordField.getText().toString();
 
-                SignIn signIn = new SignIn(nick, password);
-                String status = signIn.handleSignIn(nick,password);
-                Toast.makeText(getBaseContext(), "Logged in succesfully", Toast.LENGTH_LONG).show();
-                if(status.contains("_id")){
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                }
+            SignIn signIn = new SignIn(nick, password);
+            String status = signIn.handleSignIn(nick,password);
+            Log.d("LoginActivity", status);
+            Toast.makeText(getBaseContext(), "Logged in succesfully", Toast.LENGTH_LONG).show();
+            if(status.contains("_id")){
+                Intent transition = new Intent(LoginActivity.this, MainActivity.class);
+                transition.putExtra("user", String.valueOf(status)); //DO NOT FUCKING DELETE IT
+                startActivity(transition);
             }
-        });
+        }
+    });
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -111,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
             }
             else {
                 loadUserProfile(currentAccessToken);
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+               //startActivity(new Intent(LoginActivity.this, MainActivity.class));
             }
 
         }
@@ -137,10 +140,13 @@ public class LoginActivity extends AppCompatActivity {
                         String fbNick = first_name + "." + last_name;
                         SignIn signIn = new SignIn(fbNick, fbNick);
                         String status = signIn.handleSignIn(fbNick, fbNick);
+                        Log.d("LoginActivity", status);
                         Toast.makeText(getBaseContext(), "Logged in via facebook", Toast.LENGTH_LONG).show();
                         if (status.contains("_id")) {
-
-                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                            System.out.println("TUTAJ (loadUserProfile) !!!! " +status);
+                            Intent transition = new Intent(LoginActivity.this, MainActivity.class);
+                            transition.putExtra("user", String.valueOf(status)); //DO NOT FUCKING DELETE IT
+                            startActivity(transition);
                         } else {
                             RegisterActivity rg = new RegisterActivity();
                             rg.sendPost(first_name, last_name, fbNick, email, fbNick, fbNick, getBaseContext());
