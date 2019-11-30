@@ -8,6 +8,10 @@ import java.util.ArrayList;
 
 public class Item {
 
+
+    @SerializedName("name")
+    @Expose
+    private String listName;
     @SerializedName("comments")
     @Expose
     private ArrayList<Comment> comments;
@@ -18,6 +22,9 @@ public class Item {
     @Expose
     private boolean isChecked;
 
+    public Item(String itemName) {
+        this.itemName = itemName;
+    }
 
     public Item(String itemName, boolean isChecked) {
         this.itemName = itemName;
@@ -29,6 +36,7 @@ public class Item {
         this.isChecked = isChecked;
         this.comments = comments;
     }
+
 
     public String getItemName() {
         return itemName;
@@ -63,5 +71,13 @@ public class Item {
 
     public void setComments(ArrayList<Comment> comments) {
         this.comments = comments;
+    }
+
+    public String getListName() {
+        return listName;
+    }
+
+    public void setListName(String listName) {
+        this.listName = listName;
     }
 }

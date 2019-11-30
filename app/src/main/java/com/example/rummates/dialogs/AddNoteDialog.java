@@ -13,17 +13,20 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.rummates.R;
 import com.example.rummates.controllers.EndpointController;
-import com.example.rummates.entities.shoppinglistEntity.Comment;
+import com.example.rummates.entities.notesEntity.Note;
+import com.example.rummates.entities.notesEntity.NotesEntity;
 import com.example.rummates.entities.shoppinglistEntity.Item;
 import com.example.rummates.entities.shoppinglistEntity.ShoppingListEntity;
+import com.example.rummates.fragments.NoteFragment;
 
+import java.util.Calendar;
 import java.util.Objects;
 
-public class AddProductDialog extends DialogFragment {
-    private EditText etProduct;
+public class AddNoteDialog extends DialogFragment {
+    private EditText note;
     private String groupID;
 
-    public AddProductDialog(String groupID) {
+    public AddNoteDialog(String groupID) {
         this.groupID = groupID;
     }
 
@@ -31,30 +34,39 @@ public class AddProductDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
-        View view = getActivity().getLayoutInflater().inflate(R.layout.layout_shoppinglist_addproductdialog,null);
-        etProduct = view.findViewById(R.id.sl_add_product);
+        View view = getActivity().getLayoutInflater().inflate(R.layout.layout_notes_addnote,null);
+        note = view.findViewById(R.id.add_note);
 
         builder.setView(view)
-                .setTitle("Add Product")
+                .setTitle("Add Note")
                 .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {}})
                 .setPositiveButton("add", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String input = etProduct.getText().toString();
+                        String input = note.getText().toString();
                         if(!input.equals("")){
-                            //Get shoppingListEntity from server
-                            ShoppingListEntity shoppingListEntity = EndpointController.getInstance().getShoppingListsForGroup(groupID);
-                            //Create an item that will be sent to database
-                            Item item = new Item(input, false);
-                            item.setListName(shoppingListEntity.getLists().get(0).getListName());
-
-                            EndpointController.getInstance().patchShoppingListItem(groupID,item);
+                            Note note = new Note(input, "Anncisz");
+                            EndpointController.getInstance().patchNoteForGroup(groupID, note);
                         }
                     }});
 
         return builder.create();
+    }
+
+    private DialogInterface.OnDismissListener onDismissListener;
+
+    public void setOnDismissListener(DialogInterface.OnDismissListener onDismissListener) {
+        this.onDismissListener = onDismissListener;
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        if (onDismissListener != null) {
+            onDismissListener.onDismiss(dialog);
+        }
     }
 
 }

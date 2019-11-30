@@ -32,7 +32,7 @@ import java.util.Random;
 public class LoginActivity extends AppCompatActivity {
 
     private LoginButton loginButton;
-    private Button magicButton, registerButton, signInButton;
+    private Button registerButton, signInButton;
     String nick,password;
 
     private CallbackManager callbackManager;
@@ -43,7 +43,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         loginButton = findViewById(R.id.login_button);
-        magicButton = findViewById(R.id.magic_button);
 
         registerButton = findViewById(R.id.register_button);
         signInButton = findViewById(R.id.sign_in_button);
@@ -56,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                magicButton.setEnabled(true);
+
             }
 
             @Override
@@ -69,12 +68,6 @@ public class LoginActivity extends AppCompatActivity {
 
             }
 
-        });
-        magicButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, NotesActivity.class));
-            }
         });
 
         registerButton.setOnClickListener(new View.OnClickListener() {
@@ -95,8 +88,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 SignIn signIn = new SignIn(nick, password);
                 String status = signIn.handleSignIn(nick,password);
-                Toast.makeText(getBaseContext(), status, Toast.LENGTH_LONG).show();
-                if(Integer.parseInt(status) == 201){
+                Toast.makeText(getBaseContext(), "Logged in succesfully", Toast.LENGTH_LONG).show();
+                if(status.contains("_id")){
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 }
             }
@@ -141,14 +134,12 @@ public class LoginActivity extends AppCompatActivity {
                     if (id.length() > 0) {
                         Log.d("FBFBFBFBFBF", "UDALO SIE PANIE " + first_name);
 
-
-
                         String fbNick = first_name + "." + last_name;
                         SignIn signIn = new SignIn(fbNick, fbNick);
                         String status = signIn.handleSignIn(fbNick, fbNick);
-                        Toast.makeText(getBaseContext(), status, Toast.LENGTH_LONG).show();
-                        if (Integer.parseInt(status) == 201) {
-                            Log.d("logowanie", "UDALO SIE PANIE " + first_name);
+                        Toast.makeText(getBaseContext(), "Logged in via facebook", Toast.LENGTH_LONG).show();
+                        if (status.contains("_id")) {
+
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         } else {
                             RegisterActivity rg = new RegisterActivity();
@@ -162,7 +153,6 @@ public class LoginActivity extends AppCompatActivity {
                     requestOptions.dontAnimate();
 
                     //Glide.with(LoginActivity.this).load(image_url).into(circleImageView);
-
 
                 } catch (JSONException e) {
                     e.printStackTrace();
