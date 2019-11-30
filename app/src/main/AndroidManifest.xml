@@ -13,7 +13,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
         <activity android:name=".RegisterActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".NotesActivity"></activity>
         <activity android:name=".ProfileActivity"></activity>
         <activity android:name=".MainActivity" android:label="Main"></activity>
         <activity android:name=".CreateGroupActivity"></activity>
