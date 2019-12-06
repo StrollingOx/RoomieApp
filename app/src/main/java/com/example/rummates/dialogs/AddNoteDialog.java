@@ -54,7 +54,6 @@ public class AddNoteDialog extends DialogFragment {
 
         return builder.create();
     }
-
     private DialogInterface.OnDismissListener onDismissListener;
 
     public void setOnDismissListener(DialogInterface.OnDismissListener onDismissListener) {
