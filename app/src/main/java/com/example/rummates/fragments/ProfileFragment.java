@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.android.volley.RequestQueue;
-import com.example.rummates.Errors.ErrorTags;
+import com.example.rummates.errors.ErrorTags;
 import com.example.rummates.R;
 import com.example.rummates.entities.UserEntity;
 import com.example.rummates.serializer.UserSerializer;

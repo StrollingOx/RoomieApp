@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.rummates.R;
-import com.example.rummates.entities.groupEntity.GroupEntity;
+import com.example.rummates.entities.groupEntity.GroupGET;
 
 import java.util.ArrayList;
 
@@ -18,11 +18,11 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.Viewholder
 
     private final String TAG = "GroupAdapter";
 
-    private ArrayList<GroupEntity> arrayGroups;
+    private ArrayList<GroupGET> arrayGroups;
     private OnItemClickListener groupListener;
     private Context mContext;
 
-    public GroupsAdapter(ArrayList<GroupEntity> arrayGroups, Context context) {
+    public GroupsAdapter(ArrayList<GroupGET> arrayGroups, Context context) {
         this.arrayGroups = arrayGroups;
         this.mContext = context;
     }
@@ -55,7 +55,7 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.Viewholder
 
     @Override
     public void onBindViewHolder(@NonNull Viewholder holder, int position) {
-        final GroupEntity group = arrayGroups.get(position);
+        final GroupGET group = arrayGroups.get(position);
         holder.groupName.setText(group.getName());
     }
 

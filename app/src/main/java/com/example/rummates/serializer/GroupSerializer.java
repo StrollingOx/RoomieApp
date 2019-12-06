@@ -1,6 +1,7 @@
 package com.example.rummates.serializer;
 
 import com.example.rummates.entities.groupEntity.GroupEntity;
+import com.example.rummates.entities.groupEntity.ListOfGroups;
 import com.google.gson.Gson;
 
 public class GroupSerializer {
@@ -15,6 +16,10 @@ public class GroupSerializer {
         return gson.toJson(groupEntity);
     }
 
+    public static ListOfGroups groupListDeserializer(String json){
+        Gson gson = new Gson();
+        return gson.fromJson(json, ListOfGroups.class);
+    }
 
 }
 

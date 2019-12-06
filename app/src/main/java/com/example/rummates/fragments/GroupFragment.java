@@ -16,11 +16,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.rummates.CreateGroupActivity;
-import com.example.rummates.LoginActivity;
 import com.example.rummates.R;
 import com.example.rummates.adapters.GroupsAdapter;
+import com.example.rummates.controllers.EndpointController;
 import com.example.rummates.entities.UserEntity;
 import com.example.rummates.entities.groupEntity.GroupEntity;
+import com.example.rummates.entities.groupEntity.GroupGET;
 import com.example.rummates.serializer.UserSerializer;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -36,7 +37,7 @@ public class GroupFragment extends Fragment {
     private UserEntity user;
 
 
-    private ArrayList<GroupEntity> listOfGroups;
+    private ArrayList<GroupGET> listOfGroups;
     private RecyclerView groupsRV;
     private RecyclerView.LayoutManager layoutManager;
 
@@ -74,17 +75,19 @@ public class GroupFragment extends Fragment {
 
     private void getGroupsForCurrentUser() {
         //listOfGroups = TODO: get list from endpoint
-        listOfGroups = new ArrayList<>();
-        listOfGroups.add(new GroupEntity("local_group_0"));
-        listOfGroups.add(new GroupEntity("local_group_1"));
-        listOfGroups.add(new GroupEntity("local_group_2"));
-        listOfGroups.add(new GroupEntity("local_group_3"));
-        listOfGroups.add(new GroupEntity("local_group_4"));
-        listOfGroups.add(new GroupEntity("local_group_5"));
-        listOfGroups.add(new GroupEntity("local_group_6"));
-        listOfGroups.add(new GroupEntity("local_group_7"));
-        listOfGroups.add(new GroupEntity("local_group_8"));
-        listOfGroups.add(new GroupEntity("local_group_9"));
+        Log.d(TAG, "User nickname: "+user.getNick());
+        listOfGroups = (ArrayList<GroupGET>) EndpointController.getInstance().getAllGroupsForUser(user.getNick());
+//        listOfGroups = new ArrayList<>();
+//        listOfGroups.add(new GroupEntity("local_group_0"));
+//        listOfGroups.add(new GroupEntity("local_group_1"));
+//        listOfGroups.add(new GroupEntity("local_group_2"));
+//        listOfGroups.add(new GroupEntity("local_group_3"));
+//        listOfGroups.add(new GroupEntity("local_group_4"));
+//        listOfGroups.add(new GroupEntity("local_group_5"));
+//        listOfGroups.add(new GroupEntity("local_group_6"));
+//        listOfGroups.add(new GroupEntity("local_group_7"));
+//        listOfGroups.add(new GroupEntity("local_group_8"));
+//        listOfGroups.add(new GroupEntity("local_group_9"));
     }
 
     private void initRecyclerView(View view) {

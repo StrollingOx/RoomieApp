@@ -7,6 +7,8 @@ import com.example.rummates.endpoints.GroupsEndpoint;
 import com.example.rummates.endpoints.NotesEndpoint;
 import com.example.rummates.endpoints.ShoppingListEndpoint;
 import com.example.rummates.entities.groupEntity.GroupEntity;
+import com.example.rummates.entities.groupEntity.GroupGET;
+import com.example.rummates.entities.groupEntity.ListOfGroups;
 import com.example.rummates.entities.notesEntity.Note;
 import com.example.rummates.entities.shoppinglistEntity.CommentForItem;
 import com.example.rummates.entities.shoppinglistEntity.DeleteItem;
@@ -16,6 +18,8 @@ import com.example.rummates.entities.shoppinglistEntity.ShoppingListEntity;
 import com.example.rummates.serializer.GroupSerializer;
 import com.example.rummates.serializer.NotesSerializer;
 import com.example.rummates.serializer.ShoppingListSerializer;
+
+import java.util.List;
 
 public class EndpointController {
 
@@ -131,6 +135,19 @@ public class EndpointController {
             Log.d("Info", "Note has been patched https://rumies.herokuapp.com/groups/" + groupID + ".");
         }catch(Exception e){
             Log.d("Info", "Failed to patch the note https://rumies.herokuapp.com/groups/" + groupID + ".");
+        }
+    }
+
+    public List<GroupGET> getAllGroupsForUser(String userID){
+        ListOfGroups groupList = null;
+        try{
+            groupList = GroupSerializer.groupListDeserializer(groupsEndpoint.getGroupsForUser(userID));
+            System.out.println(groupList);
+            Log.d("Info", "Got groups from https://rumies.herokuapp.com/groups/nick/"+userID);
+            return groupList.getList();
+        }catch(Exception e){
+            Log.d("Info", "Failed to get groups from https://rumies.herokuapp.com/groups/nick/"+userID);
+            return null;
         }
     }
 
