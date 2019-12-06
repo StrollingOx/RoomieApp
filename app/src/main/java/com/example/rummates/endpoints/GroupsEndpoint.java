@@ -19,6 +19,7 @@ public class GroupsEndpoint {
     private static final String SERVER_URL = "https://rumies.herokuapp.com";
     private static final String SERVER_GROUP_GET = "https://rumies.herokuapp.com/groups";
     private static final String SERVER_GROUP_POST = "https://rumies.herokuapp.com/groups";
+    private static final String SERVER_GROUPS_GET = "https://rumies.herokuapp.com/users/groups/nick/";
 
     public String getGroup(String groupID){
         NetworkConnector networkConnector = new NetworkConnector();
@@ -51,6 +52,23 @@ public class GroupsEndpoint {
         return response;
     }
 
+    public String getGroupsForUser(String userNick){
+        NetworkConnector networkConnector = new NetworkConnector();
+        String response;
+        Log.d("Info", "Sending request to network connector: "+SERVER_GROUPS_GET+userNick);
+        try {
+            response = networkConnector.execute(2, userNick).get();
+            System.out.println("responseee "+response);
+        } catch (ExecutionException e) {
+            response = "EXECUTION_EXCEPTION";
+            System.out.println("responseee "+response);
+        } catch (InterruptedException e) {
+            response = "INTERRUPTED_EXCEPTION";
+            System.out.println("responseee "+response);
+        }
+        return response;
+    }
+
     @SuppressLint("StaticFieldLeak")
     private class NetworkConnector extends AsyncTask<Object, Void, String> {
 
@@ -61,7 +79,7 @@ public class GroupsEndpoint {
             DataOutputStream os = null;
             int responseCode = 0;
             try {
-                URL obj = new URL(selector((Integer)objects[0]));
+                URL obj = new URL(selector((Integer)objects[0]) + objects[1]);
                 con = (HttpURLConnection) obj.openConnection();
                 switch((Integer)objects[0]){
                     case 1:
@@ -76,7 +94,7 @@ public class GroupsEndpoint {
                         os.flush();
                         os.close();
                         break;
-                    default: //case 0:
+                    default: //case 0: //case 2:
                         //ERR
                         con.setRequestMethod("GET");
                         con.setRequestProperty("User-Agent", USER_AGENT);
@@ -113,6 +131,7 @@ public class GroupsEndpoint {
         switch(id){
             case 0: return SERVER_GROUP_GET;
             case 1: return SERVER_GROUP_POST;
+            case 2: return SERVER_GROUPS_GET;
             default:
                 return SERVER_URL;
         }

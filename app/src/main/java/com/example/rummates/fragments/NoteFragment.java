@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.rummates.Errors.ErrorTags;
+import com.example.rummates.errors.ErrorTags;
 import com.example.rummates.R;
 import com.example.rummates.adapters.NotesAdapter;
 import com.example.rummates.controllers.EndpointController;
