@@ -10,6 +10,7 @@ import com.example.rummates.entities.groupEntity.GroupEntity;
 import com.example.rummates.entities.groupEntity.GroupGET;
 import com.example.rummates.entities.groupEntity.ListOfGroups;
 import com.example.rummates.entities.notesEntity.Note;
+import com.example.rummates.entities.shoppinglistEntity.CheckedForItem;
 import com.example.rummates.entities.shoppinglistEntity.CommentForItem;
 import com.example.rummates.entities.shoppinglistEntity.DeleteItem;
 import com.example.rummates.entities.shoppinglistEntity.Item;
@@ -76,6 +77,16 @@ public class EndpointController {
             shoppingListEndpoint.patchShoppingListComment(groupID, JSONitem);
         }catch(Exception e){
             Log.d("Info", "Failed to patch the comment http://rumies.herokuapp.com/groups/shopping/com/"+groupID+".");
+        }
+    }
+
+    public void patchShoppingListItemChecked(String groupID, CheckedForItem item){
+        try{
+            String JSONitem = ShoppingListSerializer.checkForItemSerializer(item);
+            Log.d("Info", "Comment has been patched http://rumies.herokuapp.com/groups/shopping/check/"+groupID+".");
+            shoppingListEndpoint.patchShoppingListChecked(groupID, JSONitem);
+        }catch(Exception e){
+            Log.d("Info", "Failed to patch the comment http://rumies.herokuapp.com/groups/shopping/ccheck/"+groupID+".");
         }
     }
 

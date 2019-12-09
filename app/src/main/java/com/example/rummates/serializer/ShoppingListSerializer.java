@@ -1,5 +1,6 @@
 package com.example.rummates.serializer;
 
+import com.example.rummates.entities.shoppinglistEntity.CheckedForItem;
 import com.example.rummates.entities.shoppinglistEntity.Comment;
 import com.example.rummates.entities.shoppinglistEntity.CommentForItem;
 import com.example.rummates.entities.shoppinglistEntity.DeleteItem;
@@ -41,6 +42,11 @@ public class ShoppingListSerializer {
     }
 
     public static String commentForItemSerializer(CommentForItem item) {
+        Gson gson = new Gson();
+        return gson.toJson(item);
+    }
+
+    public static String checkForItemSerializer(CheckedForItem item) {
         Gson gson = new Gson();
         return gson.toJson(item);
     }
