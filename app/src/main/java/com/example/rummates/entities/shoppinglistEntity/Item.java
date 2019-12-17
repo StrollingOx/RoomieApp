@@ -1,5 +1,6 @@
 package com.example.rummates.entities.shoppinglistEntity;
 
+import com.example.rummates.controllers.EndpointController;
 import com.example.rummates.entities.shoppinglistEntity.Comment;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -55,7 +56,15 @@ public class Item {
     }
 
     public void toggle(){
+        String groupID = "5dc6ba9c2585a92b30b3fb81";
+
         isChecked = !isChecked;
+        ShoppingListEntity shoppingListEntity = EndpointController.getInstance().getShoppingListsForGroup(groupID);
+        CheckedForItem item = new CheckedForItem(this.getItemName());
+        item.setListName(shoppingListEntity.getLists().get(0).getListName());
+        item.setChecked(isChecked);
+        //Patch to server
+        EndpointController.getInstance().patchShoppingListItemChecked(groupID, item);
     }
 
     public void addComment(Comment comment){

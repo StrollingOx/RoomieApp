@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.rummates.CreateGroupActivity;
+import com.example.rummates.LoginActivity;
 import com.example.rummates.R;
 import com.example.rummates.adapters.GroupsAdapter;
 import com.example.rummates.controllers.EndpointController;
@@ -43,9 +45,10 @@ public class GroupFragment extends Fragment {
 
     private GroupsAdapter groupsAdapter;
     private GroupEntity groupEntity;
-
+    private TextView groupName;
 
     private Button addButton;
+    private Button logout;
 
 
     @Nullable
@@ -53,13 +56,24 @@ public class GroupFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_group_manager, container, false);
 
+        groupName = (TextView) view.findViewById(R.id.groupName);
         searchView = (SearchView)view.findViewById(R.id.searcher);
         addGroup = (FloatingActionButton)view.findViewById((R.id.add_group_button));
+        logout = (Button)view.findViewById((R.id.logout));
+
         addGroup.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), CreateGroupActivity.class));
             }
         });
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+            }
+        });
+
+        groupName.setText(getGroupName());
 
 
         getExtras();
@@ -67,7 +81,7 @@ public class GroupFragment extends Fragment {
         getGroupsForCurrentUser();
         initRecyclerView(view);
 
-
+//
 
 
         return view;
@@ -88,6 +102,10 @@ public class GroupFragment extends Fragment {
 //        listOfGroups.add(new GroupEntity("local_group_7"));
 //        listOfGroups.add(new GroupEntity("local_group_8"));
 //        listOfGroups.add(new GroupEntity("local_group_9"));
+    }
+
+    private String getGroupName(){
+        return EndpointController.getInstance().getGroupName("5dc6ba9c2585a92b30b3fb81");
     }
 
     private void initRecyclerView(View view) {

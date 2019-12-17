@@ -10,6 +10,7 @@ import com.example.rummates.entities.groupEntity.GroupEntity;
 import com.example.rummates.entities.groupEntity.GroupGET;
 import com.example.rummates.entities.groupEntity.ListOfGroups;
 import com.example.rummates.entities.notesEntity.Note;
+import com.example.rummates.entities.shoppinglistEntity.CheckedForItem;
 import com.example.rummates.entities.shoppinglistEntity.CommentForItem;
 import com.example.rummates.entities.shoppinglistEntity.DeleteItem;
 import com.example.rummates.entities.shoppinglistEntity.Item;
@@ -79,6 +80,16 @@ public class EndpointController {
         }
     }
 
+    public void patchShoppingListItemChecked(String groupID, CheckedForItem item){
+        try{
+            String JSONitem = ShoppingListSerializer.checkForItemSerializer(item);
+            Log.d("Info", "Comment has been patched http://rumies.herokuapp.com/groups/shopping/check/"+groupID+".");
+            shoppingListEndpoint.patchShoppingListChecked(groupID, JSONitem);
+        }catch(Exception e){
+            Log.d("Info", "Failed to patch the comment http://rumies.herokuapp.com/groups/shopping/ccheck/"+groupID+".");
+        }
+    }
+
     public void deleteShoppingListItem(String groupID, DeleteItem item) {
         try {
             String JSONitem = ShoppingListSerializer.deleteItemSerializer(item);
@@ -104,6 +115,19 @@ public class EndpointController {
         }
     }
 
+    public String getGroupName(String groupID){
+        GroupEntity groupEntity = null;
+
+        try{
+            groupEntity = GroupSerializer.groupEntityDeserializer(groupsEndpoint.getGroup(groupID));
+            Log.d("Info", "Loading data from https://rumies.herokuapp.com/groups/" + groupID + ".");
+            Log.d("InfoGROUPENTITY", groupEntity.toString());
+            return groupEntity.getName();
+        }catch(Exception e){
+            Log.d("Info", "kurwa Failed to download data from https://rumies.herokuapp.com/groups/" + groupID + ".");
+            return "xD";
+        }
+    }
     //Note(author, content)
     public void patchNoteForGroup(String groupID, Note note){
         try{
@@ -150,6 +174,7 @@ public class EndpointController {
             return null;
         }
     }
+
 
     //Note(content)
     public void deleteNoteForGroup(String groupID, Note note){

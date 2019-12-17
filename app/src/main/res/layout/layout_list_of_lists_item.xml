@@ -11,34 +11,31 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#ffffff">
-
+        android:layout_height="100dp"
+        android:background="#fffea1">
 
         <TextView
-            android:id="@+id/note"
+            android:id="@+id/sli_name2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="1dp"
-            android:paddingLeft="10dp"
             android:layout_marginTop="7dp"
-            android:text="NOTE"
+            android:paddingLeft="15dp"
+            android:text="PRODUCT NAME"
             android:textColor="@android:color/black"
-            android:textSize="20sp"
-            android:textStyle="normal" />
+            android:textSize="25sp"
+            android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/note_menu"
-            android:layout_width="wrap_content"
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/sli_recyclerview"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginEnd="25dp"
-            android:layout_marginTop="10dp"
-            android:text="  &#8942;  "
-            android:textSize="20sp"
-            android:textAppearance="?android:textAppearanceLarge" />
+            android:layout_below="@id/sli_name2"
+            android:layout_marginEnd="80dp"/>
 
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>
+

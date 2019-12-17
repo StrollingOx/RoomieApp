@@ -2,18 +2,7 @@ package com.example.rummates.endpoints;
 
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
-import android.os.StrictMode;
 import android.util.Log;
-
-import com.example.rummates.entities.shoppinglistEntity.ShoppingListEntity;
-import com.example.rummates.serializer.ShoppingListSerializer;
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-
-import org.bson.Document;
-import org.bson.conversions.Bson;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -29,6 +18,9 @@ public class ShoppingListEndpoint {
     private static final String SERVER_SHOPPING_PATCH_ITEM = "http://rumies.herokuapp.com/groups/shopping/item/";
     private static final String SERVER_SHOPPING_PATCH_COMMENT = "http://rumies.herokuapp.com/groups/shopping/com/";
     private static final String SERVER_SHOPPING_DELETE_ITEM = "http://rumies.herokuapp.com/groups/shopping/item/";
+
+    private static final String SERVER_SHOPPING_CHECK_ITEM = "http://rumies.herokuapp.com/groups/shopping/check/";
+
     private final String TAG = "ShoppingListEndpoint";
 
     public String getShoppingLists(String groupID){
@@ -72,6 +64,20 @@ public class ShoppingListEndpoint {
         return response;
     }
 
+    public String patchShoppingListChecked (String groupId, String JSONitem){
+        System.out.println(JSONitem);
+        NetworkConnector networkConnector = new NetworkConnector();
+        String response;
+        try {
+            response = networkConnector.execute(4, groupId, JSONitem).get();
+        } catch (ExecutionException e) {
+            response = "EXECUTION_EXCEPTION";
+        } catch (InterruptedException e) {
+            response = "INTERRUPTED_EXCEPTION";
+        }
+        return response;
+    }
+
     public String deleteShoppingListItem(String groupId, String JSONitem){
         System.out.println(JSONitem);
         NetworkConnector networkConnector = new NetworkConnector();
@@ -101,6 +107,7 @@ public class ShoppingListEndpoint {
                 switch((Integer)objects[0]){
                     case 1:
                     case 2:
+                    case 4:
                         con.setRequestMethod("PATCH");
                         con.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
                         con.setRequestProperty("Accept", "application/json");
@@ -154,51 +161,6 @@ public class ShoppingListEndpoint {
         }
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private class DatabaseConnector extends AsyncTask<ShoppingListEntity, Void, ShoppingListEntity>{
-
-        @SuppressLint("AuthLeak") String uri = "mongodb://edmin:karolkrawczyk@rumies-shard-00-00-df76j.azure.mongodb.net:27017,rumies-shard-00-01-df76j.azure.mongodb.net:27017,rumies-shard-00-02-df76j.azure.mongodb.net:27017/test?ssl=true&replicaSet=Rumies-shard-0&authSource=admin&retryWrites=true&w=majority";
-        String databaseName = "test";
-        String collectionName = "groups";
-
-        MongoClientURI clientURI;
-        MongoClient mongoClient;
-        MongoDatabase mongoDatabase;
-        MongoCollection collection;
-
-        Document search = new Document("group_name", "Roomies Dev");
-        Document found;
-
-        @Override
-        protected ShoppingListEntity doInBackground(ShoppingListEntity... shoppingListEntities) {
-
-            try {
-                clientURI = new MongoClientURI(uri);
-                mongoClient = new MongoClient(clientURI);
-                mongoDatabase = mongoClient.getDatabase(databaseName);
-                collection = mongoDatabase.getCollection(collectionName);
-                found = (Document) collection.find(search).first();
-            }catch(Exception e)
-            {
-                System.out.println("connection-exception");
-                return null;
-            }
-            return shoppingListEntities[0];
-        }
-
-        @Override
-        protected void onPostExecute(ShoppingListEntity shoppingListEntity) {
-            if(shoppingListEntity!=null) {
-                Bson updatedDocument = Document.parse(ShoppingListSerializer.shoppingListEntitySerializer(shoppingListEntity));
-                Bson updateOperation = new Document("$set", updatedDocument);
-                collection.updateOne(found, updateOperation);
-                Log.d(TAG, "Database successfully updated");
-            }else{
-                Log.d(TAG, "Failed to update document on database");
-            }
-        }
-
-    }
 
     private String selector(Integer id)
     {
@@ -207,6 +169,7 @@ public class ShoppingListEndpoint {
             case 1: return SERVER_SHOPPING_PATCH_ITEM;
             case 2: return SERVER_SHOPPING_PATCH_COMMENT;
             case 3: return SERVER_SHOPPING_DELETE_ITEM;
+            case 4: return SERVER_SHOPPING_CHECK_ITEM;
             default:
                 return SERVER_URL;
         }

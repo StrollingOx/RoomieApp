@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,22 +38,31 @@ public class ShoppingListFragment extends Fragment {
 
     private ShoppingListAdapter shoppingListAdapter;
     private ShoppingListEntity shoppingListEntity;
+    Thread tMyLoc;
+    private Button addButton, refreshButton;
+    private int index;
 
-    private Button addButton;
+    View mainView;
 
+    public ShoppingListFragment(int xd){
+        index=xd;
+    }
+    public ShoppingListFragment(){
+        super();
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_shoppinglist, container, false);
 
-
         getExtras();
         getFirstGroupId();
-        updateShoppingList(groupID);
+        updateShoppingList(groupID,index);
         initRecyclerView(view);
         initTestButton(view);
-
+        initRefreshButton(view);
+        mainView = view;
         return view;
     }
 
@@ -85,12 +95,25 @@ public class ShoppingListFragment extends Fragment {
         Log.d(TAG, "TestButton initiated");
     }
 
+    private void initRefreshButton(View view) {
+        refreshButton = (Button) view.findViewById(R.id.button_refresh);
+        refreshButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                updateShoppingList(groupID,index);
+                initRecyclerView(mainView);
+            }
+        });
+
+        Log.d(TAG, "TestButton initiated");
+    }
+
     //TODO: Refresh adapter periodically
 
-    private void updateShoppingList(String groupID) {
+    private void updateShoppingList(String groupID, int index) {
         shoppingListEntity = EndpointController.getInstance(getContext()).getShoppingListsForGroup(groupID);
-        if(shoppingList != shoppingListEntity.getLists().get(0).getProducts())
-            shoppingList = shoppingListEntity.getLists().get(0).getProducts();
+        if(shoppingList != shoppingListEntity.getLists().get(index).getProducts())
+            shoppingList = shoppingListEntity.getLists().get(index).getProducts();
 
         Log.d(TAG, "ShoppingList Updated");
     }
@@ -101,6 +124,17 @@ public class ShoppingListFragment extends Fragment {
         shoppingListAdapter = new ShoppingListAdapter(shoppingList, getContext(), groupID);
         shoppingListRV.setLayoutManager(layoutManager);
         shoppingListRV.setAdapter(shoppingListAdapter);
+        mainView = view;
+
+         shoppingListAdapter.setOnItemClickListener(new ShoppingListAdapter.OnItemClickListener() {
+             @Override
+             public void onItemClick(int position) {
+                 Log.d("TUTUTUTUTUTU", "KUUUUUUUUUUUUUURWAAAAAAAAAAAAAAAAAAAA");
+                 updateShoppingList(groupID,index);
+                 initRecyclerView(mainView);
+             }
+         });
+
 
         Log.d(TAG, "RecyclerView initiated");
     }

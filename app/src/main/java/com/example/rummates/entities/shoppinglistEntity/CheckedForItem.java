@@ -3,7 +3,7 @@ package com.example.rummates.entities.shoppinglistEntity;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class CommentForItem {
+public class CheckedForItem {
 
 
     @SerializedName("name")
@@ -12,14 +12,12 @@ public class CommentForItem {
     @SerializedName("item")
     @Expose
     private String itemName;
-    @SerializedName("nick")
+    @SerializedName("checked")
     @Expose
-    private String username;
-    @SerializedName("content")
-    @Expose
-    private String description;
+    private boolean checked;
 
-    public CommentForItem(String itemName) {
+
+    public CheckedForItem(String itemName) {
         this.itemName = itemName;
     }
 
@@ -31,13 +29,10 @@ public class CommentForItem {
         return itemName;
     }
 
-    public String getUsername() {
-        return username;
+    public boolean getChecked() {
+        return checked;
     }
 
-    public String getDescription() {
-        return description;
-    }
 
     public void setListName(String listName) {
         this.listName = listName;
@@ -47,11 +42,7 @@ public class CommentForItem {
         this.itemName = itemName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 }
