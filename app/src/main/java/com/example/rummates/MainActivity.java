@@ -1,22 +1,19 @@
 package com.example.rummates;
 
-        import android.content.Intent;
-        import android.os.Bundle;
-        import android.view.MenuItem;
+import android.os.Bundle;
+import android.view.MenuItem;
 
-        import androidx.annotation.NonNull;
-        import androidx.appcompat.app.AppCompatActivity;
-        import androidx.fragment.app.Fragment;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
-        import com.example.rummates.entities.UserEntity;
-        import com.example.rummates.fragments.GroupFragment;
-        import com.example.rummates.fragments.NoteFragment;
-        import com.example.rummates.fragments.ShoppingListFragment;
-        import com.example.rummates.fragments.ProfileFragment;
-        import com.example.rummates.serializer.UserSerializer;
-        import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-        import java.util.Objects;
+import com.example.rummates.entities.UserEntity;
+import com.example.rummates.fragments.GroupFragment;
+import com.example.rummates.fragments.ListOfListsFragment;
+import com.example.rummates.fragments.NoteFragment;
+import com.example.rummates.fragments.ProfileFragment;
+import com.example.rummates.fragments.ShoppingListFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -28,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ShoppingListFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ListOfListsFragment()).commit();
 
     }
 
@@ -42,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
             switch(item.getItemId())
             {
                 case R.id.bottom_nav_shoppinglist:
-                    selectedFragment = new ShoppingListFragment();
+                    selectedFragment = new ListOfListsFragment();
                     break;
 
                 case R.id.bottom_nav_notes:

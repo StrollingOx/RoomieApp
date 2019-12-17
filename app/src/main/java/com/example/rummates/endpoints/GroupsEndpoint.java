@@ -15,7 +15,7 @@ public class GroupsEndpoint {
 
     private static final String USER_AGENT = "Mozilla/5.0";
     private static final String SERVER_URL = "https://rumies.herokuapp.com";
-    private static final String SERVER_GROUP_GET = "https://rumies.herokuapp.com/groups";
+    private static final String SERVER_GROUP_GET = "https://rumies.herokuapp.com/groups/id/";
     private static final String SERVER_GROUP_POST = "https://rumies.herokuapp.com/groups";
     private static final String SERVER_GROUPS_GET = "https://rumies.herokuapp.com/users/groups/nick/";
 
@@ -24,9 +24,12 @@ public class GroupsEndpoint {
         String response;
         try {
             response = networkConnector.execute(0, groupID).get();
+            Log.d("pizda0", "Response Code: "+response);
         } catch (ExecutionException e) {
+            Log.d("pizda1", "Response Code: " + e);
             response = "EXECUTION_EXCEPTION";
         } catch (InterruptedException e) {
+            Log.d("pizda2", "Response Code: " +e);
             response = "INTERRUPTED_EXCEPTION";
         }
         return response;
@@ -103,6 +106,9 @@ public class GroupsEndpoint {
                 return "connection-exception";
             }
             if (responseCode == 404) {
+                Log.d("ereore", con.getURL().toString());
+                Log.d("ereore 2 ", selector((Integer)objects[0]) + objects[1]);
+                Log.d("ereore 3 ", (Integer)objects[0]+"");
                 return "not-found-exception";
             }
 

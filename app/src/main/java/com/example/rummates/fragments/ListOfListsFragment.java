@@ -11,9 +11,13 @@ import android.widget.CheckBox;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.rummates.adapters.ListOfListsAdapter;
+import com.example.rummates.entities.shoppinglistEntity.ShoppingList;
 import com.example.rummates.errors.ErrorTags;
 import com.example.rummates.R;
 import com.example.rummates.adapters.ShoppingListAdapter;
@@ -26,39 +30,31 @@ import com.example.rummates.serializer.UserSerializer;
 
 import java.util.ArrayList;
 
-public class ShoppingListFragment extends Fragment {
+public class ListOfListsFragment extends Fragment {
 
     private final String TAG = "ShoppingListFragment";
     private String groupID = ErrorTags.ERROR_NO_GROUP_ID;
     private UserEntity user = null;
 
-    private ArrayList<Item> shoppingList;
+    private ArrayList<ShoppingList> shoppingList;
     private RecyclerView shoppingListRV;
     private RecyclerView.LayoutManager layoutManager;
 
-    private ShoppingListAdapter shoppingListAdapter;
+    private ListOfListsAdapter shoppingListAdapter;
     private ShoppingListEntity shoppingListEntity;
 
     private Button addButton;
-    private int index;
 
-    public ShoppingListFragment(int xd){
-        index=xd;
-    }
-    public ShoppingListFragment(){
-        super();
-    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_shoppinglist, container, false);
+        View view = inflater.inflate(R.layout.fragment_list_of_lists, container, false);
 
         getExtras();
         getFirstGroupId();
-        updateShoppingList(groupID,index);
+        updateShoppingList(groupID);
         initRecyclerView(view);
-        initTestButton(view);
 
         return view;
     }
@@ -74,60 +70,45 @@ public class ShoppingListFragment extends Fragment {
         if(user != null)
             if(user.getGroups().size() != 0)
                 this.groupID = user.getGroups().get(0).getId();
-        else
-            groupID = "5dc6ba9c2585a92b30b3fb81";
+            else
+                groupID = "5dc6ba9c2585a92b30b3fb81";
         //TODO: if no groups -> go to CreateGroup
     }
 
-    private void initTestButton(View view) {
-        addButton = (Button) view.findViewById(R.id.button_add_record);
-        addButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                AddProductDialog addProductDialog = new AddProductDialog(groupID);
-                addProductDialog.show((getActivity()).getSupportFragmentManager(), "dialog");
-            }
-        });
-
-        Log.d(TAG, "TestButton initiated");
-    }
 
     //TODO: Refresh adapter periodically
 
-    private void updateShoppingList(String groupID, int index) {
+    private void updateShoppingList(String groupID) {
         shoppingListEntity = EndpointController.getInstance(getContext()).getShoppingListsForGroup(groupID);
-        if(shoppingList != shoppingListEntity.getLists().get(index).getProducts())
-            shoppingList = shoppingListEntity.getLists().get(index).getProducts();
+        if(shoppingList != shoppingListEntity.getLists())
+            shoppingList = shoppingListEntity.getLists();
 
         Log.d(TAG, "ShoppingList Updated");
     }
 
     private void initRecyclerView(View view){
-        shoppingListRV = view.findViewById(R.id.sl_recyclerview);
+        shoppingListRV = view.findViewById(R.id.lists_recyclerview);
         layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL,false);
-        shoppingListAdapter = new ShoppingListAdapter(shoppingList, getContext(), groupID);
+        shoppingListAdapter = new ListOfListsAdapter(shoppingList, getContext(), groupID);
         shoppingListRV.setLayoutManager(layoutManager);
         shoppingListRV.setAdapter(shoppingListAdapter);
 
-
-         shoppingListAdapter.setOnItemClickListener(new ShoppingListAdapter.OnItemClickListener() {
-             @Override
-             public void onItemClick(int position) {
-                 Log.d("TUTUTUTUTUTU", "KUUUUUUUUUUUUUURWAAAAAAAAAAAAAAAAAAAA");
-             }
-         });
-
-
         Log.d(TAG, "RecyclerView initiated");
-    }
-}
 
-//on item click implementation
-/*
- *shoppingListAdapter.setOnItemClickListener(new ShoppingListAdapter.OnItemClickListener() {
- *    @Override
- *    public void onItemClick(int position) {
- *
- *    }
- *});
- */
+        shoppingListAdapter.setOnItemClickListener(new ListOfListsAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int a) {
+//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ShoppingListFragment()).commit();
+                Log.d("TUTUTUTUTUTU", "KLIKNIENTO LKINIETNO");
+                Fragment fragment = new ShoppingListFragment(a);
+
+                FragmentManager fm = getFragmentManager();
+                FragmentTransaction transaction = fm.beginTransaction();
+                transaction.replace(R.id.fragment_container, fragment);
+                transaction.commit();
+            }
+        });
+    }
+
+
+}

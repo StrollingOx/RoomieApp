@@ -6,16 +6,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:tag="shoppinglist_tag"
     >
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:text="groupName"
+    android:id="@+id/groupName"
+    android:textSize="35dp"
+    />
 
 
     <SearchView
+        android:layout_marginTop="100dp"
         android:id="@+id/searcher"
         android:layout_width="match_parent"
         android:layout_height="70dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/groups_rv"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="200dp"
         android:layout_width="match_parent"
         android:layout_height="500dp"
         />

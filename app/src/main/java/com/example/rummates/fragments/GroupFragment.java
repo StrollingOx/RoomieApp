@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -43,7 +44,7 @@ public class GroupFragment extends Fragment {
 
     private GroupsAdapter groupsAdapter;
     private GroupEntity groupEntity;
-
+    private TextView groupName;
 
     private Button addButton;
 
@@ -53,6 +54,7 @@ public class GroupFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_group_manager, container, false);
 
+        groupName = (TextView) view.findViewById(R.id.groupName);
         searchView = (SearchView)view.findViewById(R.id.searcher);
         addGroup = (FloatingActionButton)view.findViewById((R.id.add_group_button));
         addGroup.setOnClickListener(new View.OnClickListener() {
@@ -60,6 +62,8 @@ public class GroupFragment extends Fragment {
                 startActivity(new Intent(getApplicationContext(), CreateGroupActivity.class));
             }
         });
+
+        groupName.setText(getGroupName());
 
 
         getExtras();
@@ -88,6 +92,10 @@ public class GroupFragment extends Fragment {
 //        listOfGroups.add(new GroupEntity("local_group_7"));
 //        listOfGroups.add(new GroupEntity("local_group_8"));
 //        listOfGroups.add(new GroupEntity("local_group_9"));
+    }
+
+    private String getGroupName(){
+        return EndpointController.getInstance().getGroupName("5dc6ba9c2585a92b30b3fb81");
     }
 
     private void initRecyclerView(View view) {
