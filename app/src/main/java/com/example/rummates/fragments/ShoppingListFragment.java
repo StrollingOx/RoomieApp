@@ -38,9 +38,11 @@ public class ShoppingListFragment extends Fragment {
 
     private ShoppingListAdapter shoppingListAdapter;
     private ShoppingListEntity shoppingListEntity;
-
-    private Button addButton;
+    Thread tMyLoc;
+    private Button addButton, refreshButton;
     private int index;
+
+    View mainView;
 
     public ShoppingListFragment(int xd){
         index=xd;
@@ -59,7 +61,8 @@ public class ShoppingListFragment extends Fragment {
         updateShoppingList(groupID,index);
         initRecyclerView(view);
         initTestButton(view);
-
+        initRefreshButton(view);
+        mainView = view;
         return view;
     }
 
@@ -92,6 +95,19 @@ public class ShoppingListFragment extends Fragment {
         Log.d(TAG, "TestButton initiated");
     }
 
+    private void initRefreshButton(View view) {
+        refreshButton = (Button) view.findViewById(R.id.button_refresh);
+        refreshButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                updateShoppingList(groupID,index);
+                initRecyclerView(mainView);
+            }
+        });
+
+        Log.d(TAG, "TestButton initiated");
+    }
+
     //TODO: Refresh adapter periodically
 
     private void updateShoppingList(String groupID, int index) {
@@ -108,12 +124,14 @@ public class ShoppingListFragment extends Fragment {
         shoppingListAdapter = new ShoppingListAdapter(shoppingList, getContext(), groupID);
         shoppingListRV.setLayoutManager(layoutManager);
         shoppingListRV.setAdapter(shoppingListAdapter);
-
+        mainView = view;
 
          shoppingListAdapter.setOnItemClickListener(new ShoppingListAdapter.OnItemClickListener() {
              @Override
              public void onItemClick(int position) {
                  Log.d("TUTUTUTUTUTU", "KUUUUUUUUUUUUUURWAAAAAAAAAAAAAAAAAAAA");
+                 updateShoppingList(groupID,index);
+                 initRecyclerView(mainView);
              }
          });
 

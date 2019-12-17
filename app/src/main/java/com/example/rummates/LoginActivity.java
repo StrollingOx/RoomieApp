@@ -89,11 +89,15 @@ public class LoginActivity extends AppCompatActivity {
             SignIn signIn = new SignIn(nick, password);
             String status = signIn.handleSignIn(nick,password);
             Log.d("LoginActivity", status);
-            Toast.makeText(getBaseContext(), "Logged in succesfully", Toast.LENGTH_LONG).show();
+
             if(status.contains("_id")){
+                Toast.makeText(getBaseContext(), "Logged in succesfully", Toast.LENGTH_LONG).show();
                 Intent transition = new Intent(LoginActivity.this, MainActivity.class);
                 transition.putExtra("user", String.valueOf(status)); //DO NOT FUCKING DELETE IT
                 startActivity(transition);
+            }
+            else {
+                Toast.makeText(getBaseContext(), "Failed to log in, try again", Toast.LENGTH_LONG).show();
             }
         }
     });
@@ -133,9 +137,8 @@ public class LoginActivity extends AppCompatActivity {
                     String id = object.getString("id");
                     String image_url = "https://graph.facebook.com/"+id+ "/picture?type=normal";
 
-                    Log.d("fbfbfb","here are some info: "+first_name);
                     if (id.length() > 0) {
-                        Log.d("FBFBFBFBFBF", "UDALO SIE PANIE " + first_name);
+
 
                         String fbNick = first_name + "." + last_name;
                         SignIn signIn = new SignIn(fbNick, fbNick);

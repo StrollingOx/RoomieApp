@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.rummates.CreateGroupActivity;
+import com.example.rummates.LoginActivity;
 import com.example.rummates.R;
 import com.example.rummates.adapters.GroupsAdapter;
 import com.example.rummates.controllers.EndpointController;
@@ -47,6 +48,7 @@ public class GroupFragment extends Fragment {
     private TextView groupName;
 
     private Button addButton;
+    private Button logout;
 
 
     @Nullable
@@ -57,9 +59,17 @@ public class GroupFragment extends Fragment {
         groupName = (TextView) view.findViewById(R.id.groupName);
         searchView = (SearchView)view.findViewById(R.id.searcher);
         addGroup = (FloatingActionButton)view.findViewById((R.id.add_group_button));
+        logout = (Button)view.findViewById((R.id.logout));
+
         addGroup.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), CreateGroupActivity.class));
+            }
+        });
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
             }
         });
 
@@ -71,7 +81,7 @@ public class GroupFragment extends Fragment {
         getGroupsForCurrentUser();
         initRecyclerView(view);
 
-
+//
 
 
         return view;
