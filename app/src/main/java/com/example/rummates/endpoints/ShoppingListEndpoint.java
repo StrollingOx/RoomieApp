@@ -111,10 +111,12 @@ public class ShoppingListEndpoint {
                         con.setRequestMethod("PATCH");
                         con.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
                         con.setRequestProperty("Accept", "application/json");
+                        System.out.println("IM HERE");
                         con.setDoOutput(true);
                         con.setDoInput(true);
                         os = new DataOutputStream(con.getOutputStream());
                         os.writeBytes((String)objects[2]);
+                        System.out.println("BUT AM I HERE");
 
                         os.flush();
                         os.close();
@@ -137,14 +139,16 @@ public class ShoppingListEndpoint {
                 }
                 responseCode = con.getResponseCode();
             } catch (Exception e) {
+                Log.d("Internet here", "errrrororororo  " + e);
                 return "connection-exception";
             }
             if (responseCode == 404) {
+
                 return "not-found-exception";
             }
 
-            Log.d("Internet", "Sending request to URL : " + con.getURL().toString());
-            Log.d("Internet", "Response Code: " + responseCode);
+            Log.d("Internet here", "Sending request to URL : " + con.getURL().toString());
+            Log.d("Internet here", "Response Code: " + responseCode);
             BufferedReader in = null;
             try {
                 in = new BufferedReader(
@@ -155,8 +159,10 @@ public class ShoppingListEndpoint {
                 }
                 in.close();
             } catch (Exception e) {
+                Log.d("Internet here", "errrrororororo 2222 " + e);
                 return "memory-exception";
             }
+            Log.d("Internet here", "zajebuscie  " + response.toString());
             return response.toString();
         }
     }
