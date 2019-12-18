@@ -30,15 +30,17 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
     private final String TAG = "ShoppingListAdapter";
 
     String groupID;
+    String username;
 
     private ArrayList<Item> arrayItems;
     private OnItemClickListener sliListener;
     private Context mContext;
 
-    public ShoppingListAdapter(ArrayList<Item> shoppingList, Context context, String groupID) {
+    public ShoppingListAdapter(ArrayList<Item> shoppingList, Context context, String groupID, String username) {
         this.arrayItems = shoppingList;
         this.mContext = context;
         this.groupID = groupID;
+        this.username = username;
     }
 
     public interface OnItemClickListener {
@@ -154,7 +156,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
     }
 
     private void openAddCommentDialog(int position){
-        AddCommentDialog addCommentDialog = new AddCommentDialog(position, groupID);
+        AddCommentDialog addCommentDialog = new AddCommentDialog(position, groupID, username);
         addCommentDialog.show(((MainActivity)mContext).getSupportFragmentManager(), "dialog");
     }
 }

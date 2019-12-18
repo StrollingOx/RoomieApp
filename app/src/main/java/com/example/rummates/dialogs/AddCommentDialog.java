@@ -13,21 +13,21 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.rummates.R;
 import com.example.rummates.controllers.EndpointController;
-import com.example.rummates.entities.shoppinglistEntity.Comment;
 import com.example.rummates.entities.shoppinglistEntity.CommentForItem;
 import com.example.rummates.entities.shoppinglistEntity.ShoppingListEntity;
-import com.example.rummates.serializer.ShoppingListSerializer;
 
 import java.util.Objects;
 
 public class AddCommentDialog extends DialogFragment {
     private EditText etComment;
     private String groupID;
+    private String username;
     private final int position;
 
-    public AddCommentDialog(int position, String groupID) {
+    public AddCommentDialog(int position, String groupID, String username) {
         this.position = position;
         this.groupID = groupID;
+        this.username = username;
     }
 
     @NonNull
@@ -54,7 +54,7 @@ public class AddCommentDialog extends DialogFragment {
                             CommentForItem item = new CommentForItem(shoppingListEntity.getLists().get(0).getProducts().get(position).getItemName());
                             item.setListName(shoppingListEntity.getLists().get(0).getListName());
                             item.setDescription(input);
-                            item.setUsername("unknown"); //TODO: ADD USERNAME!
+                            item.setUsername(username); //TODO: ADD USERNAME!
                             //Patch to server
                             EndpointController.getInstance().patchShoppingListItemComments(groupID, item);
 

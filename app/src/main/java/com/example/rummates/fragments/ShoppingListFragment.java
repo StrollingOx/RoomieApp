@@ -121,7 +121,7 @@ public class ShoppingListFragment extends Fragment {
     private void initRecyclerView(View view){
         shoppingListRV = view.findViewById(R.id.sl_recyclerview);
         layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL,false);
-        shoppingListAdapter = new ShoppingListAdapter(shoppingList, getContext(), groupID);
+        shoppingListAdapter = new ShoppingListAdapter(shoppingList, getContext(), groupID, user.getNick());
         shoppingListRV.setLayoutManager(layoutManager);
         shoppingListRV.setAdapter(shoppingListAdapter);
         mainView = view;

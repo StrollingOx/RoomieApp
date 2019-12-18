@@ -1,29 +1,18 @@
 package com.example.rummates.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.rummates.MainActivity;
 import com.example.rummates.R;
-import com.example.rummates.adapters.expandableadapter.CommentAdapter;
-import com.example.rummates.adapters.expandableadapter.CommentGroupModel;
-import com.example.rummates.controllers.EndpointController;
-import com.example.rummates.entities.shoppinglistEntity.DeleteItem;
-import com.example.rummates.entities.shoppinglistEntity.Item;
 import com.example.rummates.dialogs.AddCommentDialog;
 import com.example.rummates.entities.shoppinglistEntity.ShoppingList;
-import com.example.rummates.entities.shoppinglistEntity.ShoppingListEntity;
 
 import java.util.ArrayList;
 
@@ -107,8 +96,8 @@ public class ListOfListsAdapter extends RecyclerView.Adapter<ListOfListsAdapter.
         return shoppingLists.size();
     }
 
-    private void openAddCommentDialog(int position){
-        AddCommentDialog addCommentDialog = new AddCommentDialog(position, groupID);
-        addCommentDialog.show(((MainActivity)mContext).getSupportFragmentManager(), "dialog");
-    }
+//    private void openAddCommentDialog(int position){
+//        AddCommentDialog addCommentDialog = new AddCommentDialog(position, groupID, username);
+//        addCommentDialog.show(((MainActivity)mContext).getSupportFragmentManager(), "dialog");
+//    }
 }
